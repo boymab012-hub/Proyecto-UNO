@@ -3,8 +3,6 @@ package Partida;
 import Carta.Carta;
 import CartaDAO.DaoCarta;
 import Jugador.Jugador;
-
-import java.sql.SQLOutput;
 import java.util.*;
 
 public class Partida {
@@ -12,6 +10,7 @@ public class Partida {
 
 private ArrayList<Carta>mazoMesa;
 private HashMap<Integer, Jugador>jugadores;
+private Carta cartaMesa;
 private Scanner sc;
 
 public Partida(){
@@ -32,24 +31,16 @@ public Partida(){
 public void inicarPartida(){
 
 
-
+    // este metodo te pregunta el nombre que quieres poner al jugador
+    //tambien cuantos jugadores quieres ingresar
+    //tambien condiciones de maximo 4 jugadores y minimo 2
     crearJugadores();
 
+    //este metodo te muestra los jugadores registrados
     mostrarJugadores();
 
 
-
-
-
-
 }
-
-
-
-
-
-
-
 
 
 
@@ -71,12 +62,13 @@ public void inicarPartida(){
 
             ingresarJugador(i,respuesta);
 
-            //comprobamos limite de 4 jugadores
+            //comprobamos limite de 4 jugadores para que no pregunte de nuevo
             if( i == 4){
 
                 System.out.println("Se ha alcanzado el maximo de jugadores");
 
                 salir = true;
+
             }else {
 
                 System.out.println("Quieres añadir otro jugador ?: ");
@@ -109,8 +101,7 @@ public void inicarPartida(){
            }
 
 
-
-        //ponemos como limite 4 jugadores y si el usuario no quiere mas jugadores sale del bucle
+        //condicion que cambia dentro del bucle
        }while (!salir);
 
     }
@@ -140,6 +131,35 @@ public void ingresarJugador(Integer clave, String nombre){
 
     }
 
+//-----------------METODOS POR IMPLEMENTAR LOGICA-----------------
+
+
+    //carta de la mesa boca arriba
+    public void mostrarCartaMesa(){
+
+    }
+
+    //Repartimos 7 cartas a cada jugador, Recorriendo el hashmap y usando metodo recibir carta de Jugador
+    public void repartirMazoMesa(){
+
+}
+
+
+
+
+    // decidimos que jugador actua
+    public void turnoJugador(Jugador jugador){
+
+    }
+
+    //METODO IMPORTANTE!!!! Aqui pienso implementar logica para el efecto de la carta
+    //LA CLASE CARTA!! tendra su metodo de AplicarEfecto sobre CartaMesa o Jugador
+   public void comprobarCarta(Carta carta){
+
+
+   }
+
 
 
 }
+

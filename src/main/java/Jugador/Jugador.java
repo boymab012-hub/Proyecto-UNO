@@ -18,18 +18,30 @@ public class Jugador {
 
     }
 
+    //METODOS IMPORTANTES PRINCIPALES!!!
+
+    /*
+    METODO QUE RETORNA CARTA, DENTRO DE EL SE MUESTRA CARTA MANOJUGADOR Y SE RETORNA LA CARTA ELEGIDA
+    //USAMOS SCANNER Y METODO mostrarMano()
+
+   public Carta usarCarta(){
+
+   }
+    */
+
+    //METODO QUE IMPRIME POR PANTALLA LAS CARTAS DEL JUGADOR
+
+    public void mostrarMano(){
+
+    }
+
+    //Metodo para añadir carta a mano del jugador
     public void recibirCarta(Carta carta){
 
         mano.add(carta);
     }
 
 
-    public void mostrarMano(){
-
-        System.out.println("Mano de: " + nombre);
-
-
-    }
 
     public String getNombre() {
         return nombre;
@@ -42,4 +54,7 @@ public class Jugador {
     public int getBank() {
         return bank;
     }
+
+
+
 }

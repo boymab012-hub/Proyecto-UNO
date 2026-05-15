@@ -28,17 +28,20 @@ public class Carta {
     }
 
 
+//METODOS PRINCIPALES!!!
+
+
+
+
+
+
+
+
     // Getters
     public int getId()       { return id; }
     public String getColor() { return color; }
     public String getValor() { return valor; }
     public String getTipo()  { return tipo; }
-
-
-
-
-
-
 
 @Override
 public String toString() {
