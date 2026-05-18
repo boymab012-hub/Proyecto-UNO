@@ -13,6 +13,7 @@ private ArrayList<Carta>mazoBasura;
 private Carta cartaMesa;
 private boolean reversa = false;
 private int acumulacion;
+private boolean acumulacionActiva = false;
 private HashMap<Integer, Jugador>jugadores;
 public Scanner sc;
 
@@ -31,6 +32,7 @@ public Partida(){
 }
 
 //AQUI INICIAMOS TODO EL JUEGO PARA UN MAIN LIMPIO DX.
+
 public void inicarPartida(){
 
 
@@ -47,6 +49,7 @@ public void inicarPartida(){
 
 
 
+
 public void turnoJugador(Jugador jugador){
 
 comprobarManoJugador(jugador);
@@ -55,7 +58,7 @@ comprobarManoJugador(jugador);
 
 
 
-
+//METODO QUE COMPRUEBA Y EJECUTA MANO DE JUGADOR
 public void comprobarManoJugador(Jugador jugador){
 
     if (cartaMesa.getValor().equalsIgnoreCase("+4")){
@@ -263,7 +266,7 @@ public void cambiarMazoMesa(ArrayList<Carta>mazoBasura){
 
 
 
-
+//-----------↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓METODOS DE ADMINISTRACION DE JUGADORES↓↓↓↓↓↓↓↓↓----------
 
 //metodo para preguntar crear el jugador por medio de scanner
 
@@ -368,6 +371,11 @@ public void ingresarJugador(Integer clave, String nombre){
 
     }
 
+    //--------↑↑↑↑↑↑↑↑↑↑METODOS PARA ADMINISTRAR JUGADORES↑↑↑↑↑↑↑↑↑↑-----
+
+
+
+
 //-----------------METODOS POR IMPLEMENTAR LOGICA-----------------
 
 
@@ -394,6 +402,9 @@ public void ingresarJugador(Integer clave, String nombre){
 }
 
 //METODO QUE REPARTE SOLO 4 CARTAS
+
+    //Aqui puedo crear un metodo para recibir la acumulacion en caso de que este activa
+
     public void repartir4Cartas(Jugador jugador){
 
         System.out.println("El jugador " + jugador.getNombre() + " recibe 4 cartas");
