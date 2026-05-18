@@ -45,7 +45,7 @@ public class Carta {
 
 @Override
 public String toString() {
-    return "[" + color + " - " + valor + "]";
+    return "Carta [" + color + " - " + valor + " - " + tipo +"]";
 }
 
 

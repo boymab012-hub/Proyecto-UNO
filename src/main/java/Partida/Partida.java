@@ -9,9 +9,12 @@ public class Partida {
 
 
 private ArrayList<Carta>mazoMesa;
-private HashMap<Integer, Jugador>jugadores;
+private ArrayList<Carta>mazoBasura;
 private Carta cartaMesa;
-private Scanner sc;
+private boolean reversa = false;
+private int acumulacion;
+private HashMap<Integer, Jugador>jugadores;
+public Scanner sc;
 
 public Partida(){
 
@@ -41,6 +44,221 @@ public void inicarPartida(){
 
 
 }
+
+
+
+public void turnoJugador(Jugador jugador){
+
+comprobarManoJugador(jugador);
+
+}
+
+
+
+
+public void comprobarManoJugador(Jugador jugador){
+
+    if (cartaMesa.getValor().equalsIgnoreCase("+4")){
+
+        comprobarCartaMasCuatro(jugador);
+
+    }else if (cartaMesa.getValor().equalsIgnoreCase("+2")){
+
+        comprobarCartaMasDos(jugador);
+    }
+
+
+
+}
+
+//--------------------↓↓↓↓↓↓↓↓↓METODOS DE COMPROBACION DE CARTAS↓↓↓↓↓↓↓↓↓------------------------
+
+//METODO QUE COMPRUEBA Y EJECUTA CARTA +4 ↓↓↓↓↓↓↓↓↓
+
+    public void comprobarCartaMasCuatro(Jugador jugador){
+
+//SI TIENE CARTA +4 LA PUEDE JUGAR , SINO RECIBE EFECTO +4
+        ArrayList<Carta>manoJugador = jugador.getMano();
+
+        //METODO PARA ENCONTRAR CARTA  +4 EN MANO DE JUGADOR
+
+        //si cartaMesa es +4
+        if (cartaMesa.getValor().equalsIgnoreCase("+4")){
+            boolean cartaValida = false;
+            boolean poseerCarta = false;
+
+            //forEach
+            for(Carta cartaJugador : manoJugador){
+
+                //comprobamos que halla carta para usar en la mano del jugador
+                if(cartaJugador.getValor().equalsIgnoreCase(cartaMesa.getValor())){
+
+                    poseerCarta = true;
+                }
+
+            }
+
+            //si el jugador tiene cartas en la mano puede usarla
+            if(poseerCarta ){
+
+                Carta cartaJugada;
+
+                //metodo se seguridad para que la carta elegida sea un +4
+
+                while(!cartaValida) {
+
+
+                    cartaJugada = jugador.usarCarta();
+
+                    if(cartaJugada.getValor().equalsIgnoreCase("+4")){
+
+                        cartaValida = true;
+
+                        cambiarCartaMesa(cartaJugada);
+
+                        System.out.println("El jugador " + jugador.getNombre() + " Ha usado la carta " + cartaJugada.toString());
+
+
+                    }else {
+
+                        System.out.println("La carta elegida no es un +4");
+
+                    }
+
+                }// LLAVE while
+
+
+                //si el jugador no tiene carta +4 recibe el efecto de la carta
+            }else {
+
+                repartir4Cartas(jugador);
+
+            }
+
+        }
+
+    }
+
+
+
+
+    //METODO QUE COMPRUEBA Y EJECUTA CARTA +2 ↓↓↓↓↓↓↓↓↓
+
+    public void comprobarCartaMasDos(Jugador jugador){
+
+//SI TIENE CARTA +2 LA PUEDE JUGAR , SINO RECIBE EFECTO +2
+        ArrayList<Carta>manoJugador = jugador.getMano();
+
+        //METODO PARA ENCONTRAR CARTA  +4 EN MANO DE JUGADOR
+
+        //si cartaMesa es +2
+        if (cartaMesa.getValor().equalsIgnoreCase("+2")){
+            boolean cartaValida = false;
+            boolean poseerCarta = false;
+
+            //forEach
+            for(Carta cartaJugador : manoJugador){
+
+                //comprobamos que halla carta para usar en la mano del jugador
+                if(cartaJugador.getValor().equalsIgnoreCase(cartaMesa.getValor())){
+
+                    poseerCarta = true;
+                }
+
+            }
+
+            //si el jugador tiene cartas en la mano puede usarla
+            if(poseerCarta ){
+
+                Carta cartaJugada;
+
+                //metodo se seguridad para que la carta elegida sea un +4
+
+                while(!cartaValida) {
+
+
+                    cartaJugada = jugador.usarCarta();
+
+                    if(cartaJugada.getValor().equalsIgnoreCase("+2")){
+
+                        cartaValida = true;
+
+                        cambiarCartaMesa(cartaJugada);
+
+                        System.out.println("El jugador " + jugador.getNombre() + " Ha usado la carta " + cartaJugada.toString());
+
+
+                    }else {
+
+                        System.out.println("La carta elegida no es un +2");
+
+                    }
+
+                }// LLAVE while
+
+
+                //si el jugador no tiene carta +4 recibe el efecto de la carta
+            }else {
+
+                repartir2Cartas(jugador);
+
+            }
+        }
+
+    }
+
+
+
+
+
+//------------------↑↑↑↑↑↑↑↑↑↑↑ METODOS DE COMPROBACION DE CARTAS↑↑↑↑↑↑↑↑↑↑↑------------
+
+
+
+
+
+public void enviarCartaBasura(Carta carta){
+
+    mazoBasura.add(carta);
+}
+
+
+public void cambiarMazoMesa(ArrayList<Carta>mazoBasura){
+
+    mazoMesa = mazoBasura;
+
+}
+
+    //metodo que cambia la cartaMesa, guarda carta anterior en mazoBasura y agrega nueva carta
+    public void cambiarCartaMesa(Carta carta){
+
+        mazoBasura.add(cartaMesa);
+
+        cartaMesa = carta;
+
+    }
+
+
+
+    //la primera cartaMesa no puede ser un comodin
+    //usamos for each para recorrer el mazo y al encontrar una carta de tipo numero
+    //  la retorne y salga del bucle
+
+    public Carta sacarCartaMesa(){
+
+        Carta cartaEncontrada = null;
+
+            for (Carta carta : mazoMesa){
+
+                if(carta.getTipo().equalsIgnoreCase("NUMERO")){
+
+                    return carta;
+                }
+            }
+
+            return null;
+    }
+
 
 
 
@@ -131,6 +349,25 @@ public void ingresarJugador(Integer clave, String nombre){
 
     }
 
+
+
+    public void mostrarJugadoresActivos(){
+
+        for (Map.Entry<Integer,Jugador> entry : jugadores.entrySet()){
+
+            Integer clave = entry.getKey();
+            Jugador jugador = entry.getValue();
+
+            if (jugador.getJugadorActivo()){
+
+            System.out.println("Jugador: " + clave +" Nombre: " + jugador.getNombre());
+
+            }
+
+        }
+
+    }
+
 //-----------------METODOS POR IMPLEMENTAR LOGICA-----------------
 
 
@@ -139,18 +376,61 @@ public void ingresarJugador(Integer clave, String nombre){
 
     }
 
+
+
     //Repartimos 7 cartas a cada jugador, Recorriendo el hashmap y usando metodo recibir carta de Jugador
     public void repartirMazoMesa(){
 
+    //Recorremos el hashmap y en cada vuelta dentro del for añadimos 7 cartas
+                for(Jugador jugador : jugadores.values()){
+
+                    for (int i=0; i < 7; i++){
+
+                        //mazoMesa.remove() eliminacarta del array y lo devuelve
+                        jugador.recibirCarta(mazoMesa.remove(i));
+                    }
+                }
+
 }
 
+//METODO QUE REPARTE SOLO 4 CARTAS
+    public void repartir4Cartas(Jugador jugador){
 
+        System.out.println("El jugador " + jugador.getNombre() + " recibe 4 cartas");
 
+        for (int i = 0; i < 4; i++){
 
-    // decidimos que jugador actua
-    public void turnoJugador(Jugador jugador){
+            jugador.recibirCarta(mazoMesa.remove(i));
+        }
 
     }
+
+    public void repartir2Cartas(Jugador jugador){
+
+        System.out.println("El jugador " + jugador.getNombre() + " recibe 2 cartas");
+
+        for (int i = 0; i < 2; i++){
+
+            jugador.recibirCarta(mazoMesa.remove(i));
+        }
+
+    }
+
+
+    public void repartir1Carta(Jugador jugador){
+
+        System.out.println("El jugador " + jugador.getNombre() + " recibe 1 carta");
+
+        jugador.recibirCarta(mazoMesa.remove(0));
+
+    }
+
+
+
+
+
+
+
 
     //METODO IMPORTANTE!!!! Aqui pienso implementar logica para el efecto de la carta
     //LA CLASE CARTA!! tendra su metodo de AplicarEfecto sobre CartaMesa o Jugador
