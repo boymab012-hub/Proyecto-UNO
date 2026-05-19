@@ -12,8 +12,10 @@ private ArrayList<Carta>mazoMesa;
 private ArrayList<Carta>mazoBasura;
 private Carta cartaMesa;
 private boolean reversa = false;
-private int acumulacion;
+private int acumulacion = 0;
+private boolean acumulacionActivaMasCuatro = false;
 private boolean acumulacionActiva = false;
+private String colorActivo;
 private HashMap<Integer, Jugador>jugadores;
 public Scanner sc;
 
@@ -44,7 +46,6 @@ public void inicarPartida(){
     //este metodo te muestra los jugadores registrados
     mostrarJugadores();
 
-
 }
 
 
@@ -71,8 +72,63 @@ public void comprobarManoJugador(Jugador jugador){
     }
 
 
-
 }
+
+
+//----------------METODO PARA CAMBIAR COLOR DE LA MESA-----------
+
+    public void activarColorMesa(){
+
+
+
+        System.out.println("↓↓↓↓↓↓↓ ¿ QUE COLOR QUIERES QUE HALLA EN LA MESA ?↓↓↓↓↓↓↓");
+        System.out.println();
+
+        String respuesta = sc.nextLine();
+
+        //metodo de seguridad para elegir solo entre los 4 colores
+        while(!respuesta.equalsIgnoreCase("rojo") &&
+                !respuesta.equalsIgnoreCase("azul") &&
+                !respuesta.equalsIgnoreCase("verde") &&
+                !respuesta.equalsIgnoreCase("amarillo")) {
+
+        System.out.println("1. ROJO ");
+        System.out.println("2. AZUL ");
+        System.out.println("3. VERDE ");
+        System.out.println("4. AMARILLO ");
+
+        if(respuesta.equalsIgnoreCase("rojo")){
+
+            System.out.println("Haz cambiado el color de la mesa a Rojo");
+
+            colorActivo = "rojo";
+
+        } else if (respuesta.equalsIgnoreCase("azul")) {
+
+            System.out.println("Haz cambiado el color de la mesa a Azul");
+
+            colorActivo = "azul";
+
+        } else if (respuesta.equalsIgnoreCase("verde")) {
+
+            System.out.println("Haz cambiado el color de la mesa a Verde");
+
+            colorActivo = "verde";
+        }else {
+
+            System.out.println("Haz cambiado el color de la mesa a Amarillo");
+
+            colorActivo = "amarillo";
+
+        }
+
+        }//llave WHILE
+    }
+
+
+
+
+
 
 //--------------------↓↓↓↓↓↓↓↓↓METODOS DE COMPROBACION DE CARTAS↓↓↓↓↓↓↓↓↓------------------------
 
@@ -82,13 +138,15 @@ public void comprobarManoJugador(Jugador jugador){
 
 //SI TIENE CARTA +4 LA PUEDE JUGAR , SINO RECIBE EFECTO +4
         ArrayList<Carta>manoJugador = jugador.getMano();
+        boolean cartaValida = false; //si la carta que elegimos se puede usar cambia a valida
+        boolean poseerCarta = false; // cuando encontremos una carta cambia a poseerCarta
+        Carta cartaJugada;// variable que guarda el retorno de la carta elegida
 
         //METODO PARA ENCONTRAR CARTA  +4 EN MANO DE JUGADOR
 
         //si cartaMesa es +4
         if (cartaMesa.getValor().equalsIgnoreCase("+4")){
-            boolean cartaValida = false;
-            boolean poseerCarta = false;
+
 
             //forEach
             for(Carta cartaJugador : manoJugador){
@@ -104,7 +162,6 @@ public void comprobarManoJugador(Jugador jugador){
             //si el jugador tiene cartas en la mano puede usarla
             if(poseerCarta ){
 
-                Carta cartaJugada;
 
                 //metodo se seguridad para que la carta elegida sea un +4
 
@@ -119,7 +176,17 @@ public void comprobarManoJugador(Jugador jugador){
 
                         cambiarCartaMesa(cartaJugada);
 
+                        jugador.soltarCartaUsada(cartaJugada);
+
                         System.out.println("El jugador " + jugador.getNombre() + " Ha usado la carta " + cartaJugada.toString());
+
+
+                        acumulacionActivaMasCuatro= true;
+                        acumulacion += 4 ;
+
+                        //si la acumulacion esta activa
+
+                        activarColorMesa();
 
 
                     }else {
@@ -134,7 +201,19 @@ public void comprobarManoJugador(Jugador jugador){
                 //si el jugador no tiene carta +4 recibe el efecto de la carta
             }else {
 
-                repartir4Cartas(jugador);
+                if(acumulacionActivaMasCuatro){
+
+                    repartirAcumulacion(jugador,acumulacion);
+
+                    acumulacionActivaMasCuatro = false;
+                    acumulacion = 0;
+
+                }else{
+                    repartir4Cartas(jugador);
+                }
+
+
+
 
             }
 
@@ -151,13 +230,15 @@ public void comprobarManoJugador(Jugador jugador){
 
 //SI TIENE CARTA +2 LA PUEDE JUGAR , SINO RECIBE EFECTO +2
         ArrayList<Carta>manoJugador = jugador.getMano();
+        boolean cartaValida = false;
+        boolean poseerCarta = false;
+        Carta cartaJugada;
 
-        //METODO PARA ENCONTRAR CARTA  +4 EN MANO DE JUGADOR
+
+        //METODO PARA ENCONTRAR CARTA  +2 EN MANO DE JUGADOR
 
         //si cartaMesa es +2
         if (cartaMesa.getValor().equalsIgnoreCase("+2")){
-            boolean cartaValida = false;
-            boolean poseerCarta = false;
 
             //forEach
             for(Carta cartaJugador : manoJugador){
@@ -173,8 +254,6 @@ public void comprobarManoJugador(Jugador jugador){
             //si el jugador tiene cartas en la mano puede usarla
             if(poseerCarta ){
 
-                Carta cartaJugada;
-
                 //metodo se seguridad para que la carta elegida sea un +4
 
                 while(!cartaValida) {
@@ -182,18 +261,26 @@ public void comprobarManoJugador(Jugador jugador){
 
                     cartaJugada = jugador.usarCarta();
 
+
+
                     if(cartaJugada.getValor().equalsIgnoreCase("+2")){
+
 
                         cartaValida = true;
 
                         cambiarCartaMesa(cartaJugada);
 
+                        jugador.soltarCartaUsada(cartaJugada);
+
                         System.out.println("El jugador " + jugador.getNombre() + " Ha usado la carta " + cartaJugada.toString());
+
+                        acumulacionActiva = true;
+                        acumulacion += 2;
 
 
                     }else {
 
-                        System.out.println("La carta elegida no es un +2");
+                        System.err.println("LA CARTA ELEGIDA NO ES UN +2");
 
                     }
 
@@ -203,7 +290,21 @@ public void comprobarManoJugador(Jugador jugador){
                 //si el jugador no tiene carta +4 recibe el efecto de la carta
             }else {
 
-                repartir2Cartas(jugador);
+                //si hay acumulacion anterior recibe ese cumulo de cartas
+                if (acumulacionActiva || acumulacionActivaMasCuatro){
+
+                    repartirAcumulacion(jugador,acumulacion);
+
+                    acumulacionActiva = false;
+                    acumulacionActivaMasCuatro = false;
+
+
+                    //sino recibe solo 2 cartas
+                }else{
+
+                    repartir2Cartas(jugador);
+                }
+
 
             }
         }
@@ -212,9 +313,98 @@ public void comprobarManoJugador(Jugador jugador){
 
 
 
+    public void comprobarCartaCambioColor(Jugador jugador){
+
+        ArrayList<Carta>manoJugador = jugador.getMano();
+        boolean cartaValida = false;
+        boolean poseerCarta = false;
+        Carta cartaJugada;
 
 
-//------------------↑↑↑↑↑↑↑↑↑↑↑ METODOS DE COMPROBACION DE CARTAS↑↑↑↑↑↑↑↑↑↑↑------------
+        if(cartaMesa.getValor().equalsIgnoreCase("cambio_color")){
+
+
+            for (Carta carta : manoJugador){
+
+                if (carta.getColor().equalsIgnoreCase(colorActivo) || carta.getTipo().equalsIgnoreCase("comodin")){
+
+                    poseerCarta = true;
+
+                }
+
+            }
+
+
+            if(poseerCarta){
+
+                while (!cartaValida){
+
+
+                cartaJugada = jugador.usarCarta();
+
+                if(cartaJugada.getColor().equalsIgnoreCase(colorActivo) || cartaJugada.getTipo().equalsIgnoreCase("comodin")){
+
+                    cartaValida = true;
+
+                    cambiarCartaMesa(cartaJugada);
+
+                    jugador.soltarCartaUsada(cartaJugada);
+
+
+                    System.out.println("El jugador " + jugador.getNombre() + " Ha usado la carta " + cartaJugada.toString());
+
+
+                    //estas acumulaciones son para luego si el siguiente jugador tiene +4 o +2  se sigue acumulando
+                    //activamos acumulacion si es +4
+                    if (cartaJugada.getValor().equalsIgnoreCase("+4")){
+
+                        acumulacionActivaMasCuatro= true;
+                        acumulacion += 4;
+
+                        //activamos acumulacion si es +2
+                    }else if (cartaJugada.getValor().equalsIgnoreCase("+2")){
+
+                        acumulacionActiva = true;
+                        acumulacion +=2;
+                    }
+
+                }else {
+
+                    System.err.println("LA CARTA ELEGIDA NO ESTA PERMITIDA");
+                }
+
+                }//llave WHILE
+
+
+            }else{
+
+                repartir1Carta(jugador);
+
+                    //si la ultima carta que recibo se puede usar  (color o comodin)
+                if(manoJugador.get(manoJugador.size()- 1).getColor().equalsIgnoreCase(colorActivo) ||
+                        manoJugador.get(manoJugador.size()- 1).getTipo().equalsIgnoreCase("comodin")){
+
+                    Carta cartaRecibida = manoJugador.get(manoJugador.size() - 1);
+
+                    cambiarCartaMesa(cartaRecibida);
+
+                    jugador.soltarCartaUsada(cartaRecibida);
+
+                }
+
+            }
+
+
+
+        }
+
+
+
+    }
+
+
+
+//------------------↑↑↑↑↑↑↑↑↑↑↑ METODOS DE COMPROBACION DE CARTAS ↑↑↑↑↑↑↑↑↑↑↑------------
 
 
 
@@ -266,7 +456,7 @@ public void cambiarMazoMesa(ArrayList<Carta>mazoBasura){
 
 
 
-//-----------↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓METODOS DE ADMINISTRACION DE JUGADORES↓↓↓↓↓↓↓↓↓----------
+//-----------↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ METODOS DE ADMINISTRACION DE JUGADORES ↓↓↓↓↓↓↓↓↓----------
 
 //metodo para preguntar crear el jugador por medio de scanner
 
@@ -371,7 +561,7 @@ public void ingresarJugador(Integer clave, String nombre){
 
     }
 
-    //--------↑↑↑↑↑↑↑↑↑↑METODOS PARA ADMINISTRAR JUGADORES↑↑↑↑↑↑↑↑↑↑-----
+    //--------↑↑↑↑↑↑↑↑↑↑ METODOS PARA ADMINISTRAR JUGADORES ↑↑↑↑↑↑↑↑↑↑-----
 
 
 
@@ -385,6 +575,11 @@ public void ingresarJugador(Integer clave, String nombre){
     }
 
 
+
+
+
+
+    //-------↓↓↓↓↓↓↓↓ METODOS DE REPARTICION DE CARTAS ↓↓↓↓↓↓↓↓↓-----------
 
     //Repartimos 7 cartas a cada jugador, Recorriendo el hashmap y usando metodo recibir carta de Jugador
     public void repartirMazoMesa(){
@@ -436,19 +631,21 @@ public void ingresarJugador(Integer clave, String nombre){
 
     }
 
+    public void repartirAcumulacion(Jugador jugador, int acumulado){
+
+
+    for(int i = 0; i < acumulado; i++){
+
+        jugador.recibirCarta(mazoMesa.remove(i));
+
+    }
 
 
 
+    }
 
 
 
-
-    //METODO IMPORTANTE!!!! Aqui pienso implementar logica para el efecto de la carta
-    //LA CLASE CARTA!! tendra su metodo de AplicarEfecto sobre CartaMesa o Jugador
-   public void comprobarCarta(Carta carta){
-
-
-   }
 
 
 

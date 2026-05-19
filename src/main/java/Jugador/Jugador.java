@@ -50,6 +50,13 @@ public class Jugador {
    }
 
 
+   public void soltarCartaUsada(Carta carta){
+
+        mano.remove(carta);
+
+   }
+
+
     //METODO QUE IMPRIME POR PANTALLA LAS CARTAS DEL JUGADOR
 
     public void mostrarMano(){
