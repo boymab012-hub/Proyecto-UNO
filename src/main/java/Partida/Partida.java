@@ -12,9 +12,10 @@ private ArrayList<Carta>mazoMesa;
 private ArrayList<Carta>mazoBasura;
 private Carta cartaMesa;
 private boolean reversa = false;
+private boolean saltar = false;
 private int acumulacion = 0;
 private boolean acumulacionActivaMasCuatro = false;
-private boolean acumulacionActiva = false;
+private boolean acumulacionActivaMasdos = false;
 private String colorActivo;
 private HashMap<Integer, Jugador>jugadores;
 public Scanner sc;
@@ -69,6 +70,14 @@ public void comprobarManoJugador(Jugador jugador){
     }else if (cartaMesa.getValor().equalsIgnoreCase("+2")){
 
         comprobarCartaMasDos(jugador);
+
+    } else if (cartaMesa.getValor().equalsIgnoreCase("CAMBIO_COLOR")) {
+
+        comprobarCartaCambioColor(jugador);
+
+    }else if (cartaMesa.getValor().equalsIgnoreCase("SALTAR")){
+
+
     }
 
 
@@ -180,20 +189,8 @@ public void comprobarManoJugador(Jugador jugador){
 
                         System.out.println("El jugador " + jugador.getNombre() + " Ha usado la carta " + cartaJugada.toString());
 
-
-                    if (!acumulacionActivaMasCuatro){
-
-                        acumulacion = 4;
-                        acumulacionActivaMasCuatro= true;
-                    }else{
-
-                        acumulacion += 4 ;
-
-                    }
-
-                    //si la acumulacion esta activa
-
-                        activarColorMesa();
+                        //aplicar efectos
+                        ejecutarCartaJugada(cartaJugada);
 
 
                     }else {
@@ -283,29 +280,7 @@ public void comprobarManoJugador(Jugador jugador){
 
                         System.out.println("El jugador " + jugador.getNombre() + " Ha usado la carta " + cartaJugada.toString());
 
-
-                        //si carta jugada es +2 se acumula 2 en acumulacion
-                        if (cartaJugada.getValor().equalsIgnoreCase("+2")){
-
-                            //si no han lanzado antes un +2 acumulacion empieza en +2
-                        if (!acumulacionActiva){
-
-                            acumulacion = 2;
-                            acumulacionActiva = true;
-                        }
-                            else{
-
-                                acumulacion += 2;
-                        }
-
-                            //llave if +2
-                            }    else {
-
-                            acumulacionActivaMasCuatro = true;
-                            acumulacion +=4;
-
-                            }
-
+                        ejecutarCartaJugada(cartaJugada);
 
                     }else {
 
@@ -320,11 +295,11 @@ public void comprobarManoJugador(Jugador jugador){
             }else {
 
                 //si hay acumulacion anterior recibe ese cumulo de cartas
-                if (acumulacionActiva || acumulacionActivaMasCuatro){
+                if (acumulacionActivaMasdos || acumulacionActivaMasCuatro){
 
                     repartirAcumulacion(jugador,acumulacion);
 
-                    acumulacionActiva = false;
+                    acumulacionActivaMasdos = false;
                     acumulacionActivaMasCuatro = false;
                     acumulacion = 0;
 
@@ -382,36 +357,10 @@ public void comprobarManoJugador(Jugador jugador){
 
                     System.out.println("El jugador " + jugador.getNombre() + " Ha usado la carta " + cartaJugada.toString());
 
-
-                    //estas acumulaciones son para luego si el siguiente jugador tiene +4 o +2  se sigue acumulando
-                    //activamos acumulacion si es +4
-                    if (cartaJugada.getValor().equalsIgnoreCase("+4")){
-
-                        acumulacionActivaMasCuatro= true;
-                        acumulacion += 4;
-
-                        activarColorMesa();
-
-                        //activamos acumulacion si es +2
-                    }else if (cartaJugada.getValor().equalsIgnoreCase("+2")){
-
-                        acumulacionActiva = true;
-                        acumulacion = 2;
-
-                    } else if (cartaJugada.getValor().equalsIgnoreCase("cambio_color")) {
-
-                        activarColorMesa();
-
-                        //NUEVA IMPLEMENTACION PARA CARTA PASAR
-                    }else if (cartaJugada.getColor().equalsIgnoreCase(colorActivo) &&
-                            cartaJugada.getValor().equalsIgnoreCase("SALTAR")){
+                    //Aplica efectos
+                    ejecutarCartaJugada(cartaJugada);
 
 
-                        //NUEVA IMPLEMENTACION PARA CARTA REVERSA
-                    } else if (cartaJugada.getColor().equalsIgnoreCase(colorActivo) &&
-                    cartaJugada.getTipo().equalsIgnoreCase("REVERSA")){
-
-                    }
 
                 }else {
 
@@ -425,53 +374,227 @@ public void comprobarManoJugador(Jugador jugador){
 
                 repartir1Carta(jugador);
 
-                    //si la ultima carta que recibo se puede usar  (color o comodin)
-                if(manoJugador.get(manoJugador.size()- 1).getColor().equalsIgnoreCase(colorActivo) ||
-                        manoJugador.get(manoJugador.size()- 1).getTipo().equalsIgnoreCase("comodin")){
+
+                    //obtenemos la ultima carta del jugador
+                Carta ultimaCarta= manoJugador.get(manoJugador.size() - 1);
+
+                //si la ultima carta que recibe es (color o comodin) la podra usar o guardar
+                comprobarCartaRecibidaEnColor(ultimaCarta,jugador);
 
 
-                    Carta cartaRecibida = manoJugador.get(manoJugador.size() - 1);
 
-                    System.out.println("LA CARTA QUE RECIBISTE ES: " + cartaRecibida.toString() );
-                    System.out.println("PUEDES USARLA O QUEDARTELA QUE OPCION ELIGES ?");
-                    System.out.println("OPCION 1 - USAR CARTA ");
-                    System.out.println("OPCION 2 - CONSERVAR CARTA");
+            }
 
-                    int respuesta;
+        }
 
-                    respuesta = sc.nextInt();
+    }
 
 
-                    //SI RESPUESTA ES 1 SE USA LA CARTA Y SE APLICA LOS EFECTOS
-                    //SI RESPUESTA ES 2 PASA AL SIGUIENTE TURNO Y SE MANTIENE cartaMesa ANTERIOR
+    public void comprobarCartaSaltar(Jugador jugador){
 
-                    if (respuesta == 1){
+        ArrayList<Carta>manoJugador = jugador.getMano();
+        boolean cartaValida = false;
+        boolean poseerCarta = false;
+        Carta cartaJugada;
 
-                        cambiarCartaMesa(cartaRecibida);
+    if (cartaMesa.getValor().equalsIgnoreCase("SALTAR")){
 
-                        jugador.soltarCartaUsada(cartaRecibida);
 
-                        //EVALUAMOS DE NUEVO SI LA CARTA JUGADA ES UN +4 O +2 O SINO O SI ES OTRO COMODIN O SI ES UNA CARTA NUMERO
-                        //YA QUE HAY EFECTOS AL USAR LA CARTA
+        for (Carta carta : manoJugador){
 
-                        ejecutarCartaRecibidaEnColor(cartaRecibida,jugador);
+            if (carta.getValor().equalsIgnoreCase("SALTAR") ||
+                    carta.getColor().equalsIgnoreCase(cartaMesa.getColor()) ||
+                    carta.getTipo().equalsIgnoreCase("COMODIN")){
+
+                poseerCarta = true;
+
+            }
+        }
+
+        if(poseerCarta){
+
+
+            while (!cartaValida){
+
+
+               cartaJugada = jugador.usarCarta();
+
+                if (cartaJugada.getValor().equalsIgnoreCase("SALTAR") ||
+                        cartaJugada.getColor().equalsIgnoreCase(cartaMesa.getColor()) ||
+                cartaJugada.getTipo().equalsIgnoreCase("COMODIN")){
+
+
+                    cartaValida = true;
+
+                    cambiarCartaMesa(cartaJugada);
+
+                    jugador.soltarCartaUsada(cartaJugada);
+
+                    //Aplica efectos
+                    ejecutarCartaJugada(cartaJugada);
+
+
+                }else{
+
+                    System.err.println("LA CARTA JUGADA NO ESTA PERMITIDA");
+                }
+
+
+            }
+
+
+            //si no posee carta en la mano para jugar
+        }else{
+
+            repartir1Carta(jugador);
+
+            //obtenemos la ultima carta recibida
+            Carta ultimaCarta= manoJugador.get(jugador.getMano().size() - 1);
+
+            comprobarCartaRecibidaEnSaltar(ultimaCarta,jugador);
+
+
+
+            }
+
+        }
+
+    }
+
+
+
+
+    public void comprobarCartaReversa(Jugador jugador){
+
+        ArrayList<Carta>manoJugador = jugador.getMano();
+        boolean cartaValida = false;
+        boolean poseerCarta = false;
+        Carta cartaJugada;
+
+        if (cartaMesa.getValor().equalsIgnoreCase("REVERSA")){
+
+
+            for (Carta carta : manoJugador){
+
+                if (carta.getValor().equalsIgnoreCase("REVERSA") ||
+                        carta.getColor().equalsIgnoreCase(cartaMesa.getColor()) ||
+                        carta.getTipo().equalsIgnoreCase("COMODIN")){
+
+                    poseerCarta = true;
+
+                }
+            }
+
+            if(poseerCarta){
+
+
+                while (!cartaValida){
+
+
+                    cartaJugada = jugador.usarCarta();
+
+                    if (cartaJugada.getValor().equalsIgnoreCase("REVERSA") ||
+                            cartaJugada.getColor().equalsIgnoreCase(cartaMesa.getColor()) ||
+                            cartaJugada.getTipo().equalsIgnoreCase("COMODIN")){
+
+
+                        cartaValida = true;
+
+                        cambiarCartaMesa(cartaJugada);
+
+                        jugador.soltarCartaUsada(cartaJugada);
+
+                        //Aplica efectos
+                        ejecutarCartaJugada(cartaJugada);
+
 
                     }else{
 
-                        System.out.println("HAZ DECIDIDO CONSERVAR TU CARTA !");
-
+                        System.err.println("LA CARTA JUGADA NO ESTA PERMITIDA");
                     }
 
 
-
-
-
-
-
-
-
-
                 }
+
+
+                //si no posee carta en la mano para jugar
+            }else{
+
+                repartir1Carta(jugador);
+
+                //obtenemos la ultima carta recibida
+                Carta ultimaCarta= jugador.getMano().get(jugador.getMano().size() - 1);
+
+                comprobarCartaRecibidaEnReversa(ultimaCarta,jugador);
+
+
+
+            }
+
+        }
+
+    }
+
+
+
+        //METODO PARA APLICAR AFECTOS DE CARTA
+        public void ejecutarCartaJugada(Carta cartaJugada){
+
+
+            //estas acumulaciones son para luego si el siguiente jugador tiene +4 o +2  se sigue acumulando
+            //activamos acumulacion si es +4
+            if (cartaJugada.getValor().equalsIgnoreCase("+4")){
+
+                    //se puede usar un +4 para un +2 pero no un +2 para un +4
+                if (acumulacionActivaMasdos || acumulacionActivaMasCuatro){
+
+                    acumulacion += 4;
+
+                }else {
+
+                    acumulacion = 4;
+                }
+
+
+                activarColorMesa();
+
+                //activamos acumulacion si es +2
+            }else if (cartaJugada.getValor().equalsIgnoreCase("+2")){
+
+                acumulacionActivaMasdos = true;
+                acumulacion = 2;
+
+            } else if (cartaJugada.getValor().equalsIgnoreCase("cambio_color")) {
+
+                activarColorMesa();
+
+                //NUEVA IMPLEMENTACION PARA CARTA PASAR
+            }else if (cartaJugada.getValor().equalsIgnoreCase("SALTAR")){
+
+                //si antes saltar esta desactivo activalo y sino desactivalo
+                if(!saltar){
+
+                    saltar = true;
+                }else {
+
+                    saltar = false;
+                }
+
+
+
+
+                //NUEVA IMPLEMENTACION PARA CARTA REVERSA
+            } else if (cartaJugada.getTipo().equalsIgnoreCase("REVERSA")){
+
+                //si antes reversa no esta activo activalo y sino desactivalo
+                if (!reversa){
+
+                    reversa = true;
+                }else {
+
+                    reversa = false;
+                }
+
 
             }
 
@@ -481,53 +604,141 @@ public void comprobarManoJugador(Jugador jugador){
 
 
 
-    }
-
-public void ejecutarCartaRecibidaEnColor(Carta cartaRecibida,Jugador jugador){
 
 
-    if(cartaRecibida.getValor().equalsIgnoreCase("+4")){
+        public void comprobarCartaNumero(Jugador jugador){
 
-        System.out.println("El jugador " + jugador.getNombre() + " Ha usado la carta " + cartaRecibida.toString());
-
-
-        acumulacion = 4;
-        acumulacionActivaMasCuatro= true;
-
-
-    }else if (cartaRecibida.getValor().equalsIgnoreCase("+2") &&
-            cartaRecibida.getColor().equalsIgnoreCase(colorActivo)){
-
-        System.out.println("El jugador " + jugador.getNombre() + " Ha usado la carta " + cartaRecibida.toString());
-
-        acumulacionActiva = true;
-        acumulacion = 2;
-
-    }else if(cartaRecibida.getValor().equalsIgnoreCase("cambio_color")){
-
-        activarColorMesa();
-
-        //NUEVA IMPLEMENTACION SALTAR
-    }else if (cartaRecibida.getValor().equalsIgnoreCase("SALTAR") &&
-            cartaRecibida.getColor().equalsIgnoreCase(colorActivo)){
+            ArrayList<Carta>manoJugador = jugador.getMano();
+            boolean cartaValida = false;
+            boolean poseerCarta = false;
+            Carta cartaJugada;
 
 
 
-        //NUEVA IMPLEMENTACION REVERSA
+        if (cartaMesa.getTipo().equalsIgnoreCase("NUMERO")){
 
-    } else if (cartaRecibida.getValor().equalsIgnoreCase("REVERSA") &&
-            cartaRecibida.getColor().equalsIgnoreCase(colorActivo)) {
 
-    }
+            for(Carta cartaJugador : manoJugador){
+
+                //comprobamos que halla carta para usar en la mano del jugador +2 o un+4
+                if(cartaJugador.getTipo().equalsIgnoreCase(cartaMesa.getTipo()) ||
+                        cartaJugador.getColor().equalsIgnoreCase(cartaMesa.getColor()) ||
+                        cartaJugador.getTipo().equalsIgnoreCase("COMODIN")) {
+
+                    poseerCarta = true;
+                }
+
+            }
+
+            if (poseerCarta){
 
 
 
 
+            }
 
+
+        }
+
+        }
+
+
+
+
+public void comprobarCartaRecibidaEnNumero(Carta ultimaCarta, Jugador jugador){
 
 
 
 }
+
+
+        public void comprobarCartaRecibidaEnReversa(Carta ultimaCarta, Jugador jugador){
+
+            if (ultimaCarta.getValor().equalsIgnoreCase("REVERSA") ||
+                    ultimaCarta.getColor().equalsIgnoreCase(cartaMesa.getColor())||
+                    ultimaCarta.getTipo().equalsIgnoreCase("COMODIN")){
+
+
+                eleccionCartaRecibida(ultimaCarta,jugador);
+
+
+            }
+
+
+
+        }
+
+public void comprobarCartaRecibidaEnSaltar(Carta ultimaCarta,Jugador jugador){
+
+    //si la carta recibida es igual a saltar o tenga un color igual o sea un comodin se podra jusar
+    if (ultimaCarta.getValor().equalsIgnoreCase("SALTAR") ||
+            ultimaCarta.getColor().equalsIgnoreCase(cartaMesa.getColor())||
+            ultimaCarta.getTipo().equalsIgnoreCase("COMODIN")){
+
+
+        eleccionCartaRecibida(ultimaCarta,jugador);
+
+
+    }
+}
+
+
+            //AVISAR SI CARTA RECIBIDA SE PUEDE JUGAR O NO,TENIENDO EN CUENTA EL COLOR ACTIVO
+    public void comprobarCartaRecibidaEnColor(Carta ultimaCarta,Jugador jugador){
+
+        //si la ultima carta que recibo se puede usar  (color o comodin)
+        if(ultimaCarta.getColor().equalsIgnoreCase(colorActivo) ||
+                ultimaCarta.getTipo().equalsIgnoreCase("comodin")){
+
+
+                eleccionCartaRecibida(ultimaCarta,jugador);
+
+
+
+        }
+
+    }
+
+
+//METODO PARA PREGUNTAR SI QUIERE USAR LA CARTA RECIBIDA O NO
+    public void eleccionCartaRecibida(Carta ultimaCarta, Jugador jugador){
+
+        System.out.println("LA CARTA QUE RECIBISTE ES: " + ultimaCarta.toString() );
+        System.out.println("PUEDES USARLA O QUEDARTELA QUE OPCION ELIGES ?");
+        System.out.println("OPCION 1 - USAR CARTA ");
+        System.out.println("OPCION 2 - CONSERVAR CARTA");
+
+        int respuesta;
+
+        respuesta = sc.nextInt();
+
+
+        //SI RESPUESTA ES 1 SE USA LA CARTA Y SE APLICA LOS EFECTOS
+        //SI RESPUESTA ES 2 PASA AL SIGUIENTE TURNO Y SE MANTIENE cartaMesa ANTERIOR
+
+        if (respuesta == 1){
+
+            cambiarCartaMesa(ultimaCarta);
+
+            jugador.soltarCartaUsada(ultimaCarta);
+
+            //EVALUAMOS DE NUEVO SI LA CARTA JUGADA ES UN +4 O +2 O SINO O SI ES OTRO COMODIN O SI ES UNA CARTA NUMERO
+            //YA QUE HAY EFECTOS AL USAR LA CARTA
+
+            ejecutarCartaJugada(ultimaCarta);
+
+            System.out.println("El jugador " + jugador.getNombre() + " Ha usado la carta " + ultimaCarta.toString());
+
+        }else{
+
+            System.out.println("HAZ DECIDIDO CONSERVAR TU CARTA !");
+
+        }
+
+    }
+
+
+
 
 //------------------↑↑↑↑↑↑↑↑↑↑↑ METODOS DE COMPROBACION DE CARTAS ↑↑↑↑↑↑↑↑↑↑↑------------
 
@@ -541,7 +752,7 @@ public void enviarCartaBasura(Carta carta){
 }
 
 
-public void cambiarMazoMesa(ArrayList<Carta>mazoBasura){
+public void recargarMazoMesa(ArrayList<Carta>mazoBasura){
 
     mazoMesa = mazoBasura;
 
@@ -765,7 +976,7 @@ public void ingresarJugador(Integer clave, String nombre){
 
     }
             //al repartir lo acumulado todo vuelve a inicio
-        acumulacionActiva = false;
+        acumulacionActivaMasdos = false;
         acumulacionActivaMasCuatro = false;
         acumulacion = 0;
 
@@ -777,8 +988,8 @@ public void ingresarJugador(Integer clave, String nombre){
 1.COMPROBACION DE masoMeza Si esta vacio
 2.INSERTAR EFECTO DE SALTAR
 3.INSERTAR EFECTO DE REVERSA
+4. COMPROBAR LOS ERRORES QUE PUEDE DAR AL RECIBIR LA CARTA QUE SE PUEDE USAR O NO. ----COMPROBAR METODOS RECIBIR CARTA--- comparacion de condiciones. podria dar null
 * */
-
 
 
 
