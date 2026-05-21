@@ -45,6 +45,7 @@ public class Jugador {
 
            numero = sc.nextInt();
 
+           //metodo de seguridad por si jugador pulsa un 0 o un numero mayor de los elementos del array
            if (numero > mano.size() || numero < 0) {
 
                System.out.println("NO TIENES CARTAS EN ESTA POSICION");
