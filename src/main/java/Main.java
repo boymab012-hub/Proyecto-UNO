@@ -16,7 +16,7 @@ public class Main {
 
         partida1.mostrarJugadores();
 
-        */
+
 
         //               PRUEBASSSSS     //
 
@@ -37,6 +37,13 @@ public class Main {
 
         System.out.println("El jugador + " + jugador1.getNombre() + "Ha usado la carta " + carta.toString());
 
+
+*/
+
+
+
+        Partida partida1 = new Partida();
+        partida1.inicarPartida();
 
 
 

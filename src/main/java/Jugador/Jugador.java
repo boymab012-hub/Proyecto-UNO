@@ -8,8 +8,6 @@ import java.util.Scanner;
 public class Jugador {
 
     private String nombre;
-    private boolean jugadorActivo = true;
-    private boolean saltar = false;
     private ArrayList<Carta>mano; // aqui guardamos las cartas del jugador
     private int bank = 0;  // por si queremos añadir apuesta
     public Scanner sc = new Scanner(System.in);
@@ -32,21 +30,29 @@ public class Jugador {
 
    public Carta usarCarta(){
 
+       int numero;
 
-       System.out.println("Estas son tus cartas");
+       //METODO DE SEGURIDAD PARA ELEGIR UNA POSICION CORRECTA DE LA MANO Y NO DE ERROR
+       do{
+
+       System.out.println("CARTAS JUGADOR: " + nombre);
        System.out.println();
 
      mostrarMano();
 
        System.out.println();
-       System.out.println("Que carta eliges ?");
+       System.out.println("Que Carta Quieres Jugar ?");
 
-       int numero;
+           numero = sc.nextInt();
 
-       numero = sc.nextInt();
+           if (numero > mano.size() || numero < 0) {
 
-       return mano.get(numero -1 );
+               System.out.println("NO TIENES CARTAS EN ESTA POSICION");
+           }
 
+       }while (numero > mano.size() || numero < 1);
+
+       return mano.get(numero - 1 );
    }
 
 
@@ -74,23 +80,6 @@ public class Jugador {
         mano.add(carta);
     }
 
-
-    public boolean getSaltar() {
-        return saltar;
-    }
-
-    public void setSaltar(boolean saltar) {
-        this.saltar = saltar;
-    }
-
-    public boolean getJugadorActivo(){
-
-        return jugadorActivo;
-    }
-
-    public void setJugadorActivo(boolean jugadorActivo) {
-        this.jugadorActivo = jugadorActivo;
-    }
 
     public String getNombre() {
         return nombre;
