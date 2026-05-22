@@ -12,14 +12,14 @@ public class Carta {
 
     //Atributos
     private int id;
-    private  String color;
+    private String color;
     private String valor;
     private String tipo;
 
 
     //Constructor
 
-    public Carta(int id, String color, String valor, String tipo){
+    public Carta(int id, String color, String valor, String tipo) {
 
         this.id = id;
         this.color = color;
@@ -31,32 +31,36 @@ public class Carta {
 //METODOS PRINCIPALES!!!
 
 
-
-
-
-
-
-
     // Getters
-    public int getId()       { return id; }
-    public String getColor() { return color; }
-    public String getValor() { return valor; }
-    public String getTipo()  { return tipo; }
+    public int getId() {
+        return id;
+    }
 
-@Override
-public String toString() {
+    public String getColor() {
+        return color;
+    }
 
-    return "Carta [" + color + " - " + valor + " - " + tipo +"]";
+    public String getValor() {
+        return valor;
+    }
 
-}
+    public String getTipo() {
+        return tipo;
+    }
+
+    @Override
+    public String toString() {
+
+        return "Carta [" + color + " - " + valor + " - " + tipo + "]";
+
+    }
 
 
-//SUPER TOSTRING DE COLORES
-public String toStringSuper(String colorLetra1, String colorLetra2){
+    //SUPER TOSTRING DE COLORES
+    public String toStringSuper(String colorLetra1, String colorLetra2) {
 
-        return "Carta [" + colorLetra1 + color + colorLetra2 + " - " + valor + " - " + tipo +"]";
-}
-
+        return "Carta [" + colorLetra1 + color + colorLetra2 + " - " + valor + " - " + tipo + "]";
+    }
 
 
 }

@@ -6,10 +6,8 @@ public class ConexionBD {
 
     public static Connection instance = null;
     public static final String url = "jdbc:mysql://localhost:3306/uno_db";
-    public static final String usuario ="root";
-    public static final String contraseña= "0414358062dD#";
-
-
+    public static final String usuario = "root";
+    public static final String contraseña = "";
 
 
     public static Connection getConnection() {

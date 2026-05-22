@@ -41,7 +41,7 @@ public class Main {
 */
 
 
-
+/*
         Partida partida1 = new Partida();
 
                 partida1.ingresarJugador(1,"Darwin");
@@ -56,6 +56,13 @@ public class Main {
 
 
             partida1.inicarPartida();
+
+
+*/
+
+
+        Partida partida1 = new Partida();
+        partida1.inicarPartida();
 
 
     }
