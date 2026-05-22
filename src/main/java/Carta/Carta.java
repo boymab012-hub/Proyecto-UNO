@@ -45,7 +45,16 @@ public class Carta {
 
 @Override
 public String toString() {
+
     return "Carta [" + color + " - " + valor + " - " + tipo +"]";
+
+}
+
+
+//SUPER TOSTRING DE COLORES
+public String toStringSuper(String colorLetra1, String colorLetra2){
+
+        return "Carta [" + colorLetra1 + color + colorLetra2 + " - " + valor + " - " + tipo +"]";
 }
 
 

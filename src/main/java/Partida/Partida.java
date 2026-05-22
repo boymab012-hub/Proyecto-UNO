@@ -14,18 +14,21 @@ private Carta cartaMesa;
 private boolean reversa = false;
 private boolean saltar = false;
 private int acumulacion = 0;
-private boolean acumulacionActivaMasCuatro = false;
-private boolean acumulacionActivaMasdos = false;
+private boolean acumulacionActiva = false;
 private boolean colorActivo = false;
 private String color;
 private HashMap<Integer, Jugador>jugadores;
 private boolean partidaActiva = true;
 public Scanner sc;
 
+
+
+
 public Partida(){
 
     this.jugadores = new HashMap<>();
     this.mazoBasura = new ArrayList<>();
+
 
     //extraemos las cartas de la base de datos y guardamos en atributo de partida
     this.mazoMesa = DaoCarta.cargarMazo();
@@ -79,7 +82,9 @@ public void inicarPartida(){
 
         comprobarGanador(jugadores.get(clave));
 
+
         mostrarCartaMesa();
+
 
 
             //retorna el sentido si es NORMAL dara el siguiente jugador si es REVERSA dara el anterior
@@ -307,11 +312,24 @@ public void comprobarManoJugador(Jugador jugador){
             //forEach
             for(Carta cartaJugador : manoJugador){
 
+                if (acumulacionActiva && colorActivo){
+
                 //comprobamos que halla carta para usar en la mano del jugador
-                if(cartaJugador.getValor().equalsIgnoreCase("+4") || cartaJugador.getValor().equalsIgnoreCase(color)){
+                if(cartaJugador.getValor().equalsIgnoreCase("+4")){
 
                     poseerCarta = true;
                 }
+
+                }
+                    if (!acumulacionActiva && colorActivo){
+
+                        if ( cartaJugador.getValor().equalsIgnoreCase(color)){
+
+                            poseerCarta = true;
+                        }
+
+                    }
+
 
             }
 
@@ -320,16 +338,13 @@ public void comprobarManoJugador(Jugador jugador){
             if(poseerCarta ){
 
 
-                System.out.println("TIENES CARTAS VALIDAS PARA JUGAR");
-                System.out.println();
-
-                //metodo se seguridad para que la carta elegida sea un +4
 
 
-                if(acumulacionActivaMasCuatro){
+                if(acumulacionActiva && colorActivo){
                     System.out.println("TIENES CARTA PARA JUGAR");
                     System.out.println();
 
+                    //metodo se seguridad para que la carta elegida sea un +4
                 while(!cartaValida) {
 
 
@@ -360,17 +375,19 @@ public void comprobarManoJugador(Jugador jugador){
                 }// LLAVE while
 
                     //si no hay acumulacion puedo jugar un +4 igualmente o una carta del color activo
-                } else if (!acumulacionActivaMasCuatro && colorActivo) {
+                } else if (!acumulacionActiva && colorActivo) {
 
 
                     while(!cartaValida) {
+
                         System.out.println("TIENES CARTA PARA JUGAR");
                         System.out.println();
 
                         cartaJugada = jugador.usarCarta();
 
 
-                        if(cartaJugada.getValor().equalsIgnoreCase("+4") || cartaJugada.getColor().equalsIgnoreCase(color)){
+                        if(cartaJugada.getTipo().equalsIgnoreCase("COMODIN") ||
+                                cartaJugada.getColor().equalsIgnoreCase(color)){
 
                             cartaValida = true;
 
@@ -400,8 +417,9 @@ public void comprobarManoJugador(Jugador jugador){
             }else {
 
 
-                //si el color estaba activo y no  tiene carta cogera una del mazoMesa
-                if (!acumulacionActivaMasCuatro && colorActivo){
+
+                //si no hay acumulacion es que ya alguien mas lo recibio y no  tiene carta del color activo  cogera una del mazoMesa
+                if (!acumulacionActiva && colorActivo){
 
                     repartir1Carta(jugador);
 
@@ -412,18 +430,10 @@ public void comprobarManoJugador(Jugador jugador){
                     comprobarCartaRecibidaEnColor(ultimaCarta,jugador);
 
 
-                    //si el jugador no tiene carta +4 y hay acumulacion recibe  acumulacion
-                }else if (acumulacionActivaMasCuatro){
-
-                    repartirAcumulacion(jugador,acumulacion);
-
-                    acumulacionActivaMasCuatro = false;
-                    acumulacion = 0;
-
-                    //si no hay acumulacion  recibe solo +4 cartas
+                    //si hay acumulacion o no recibira las cartas que correspondan
                 }else {
 
-                    repartir4Cartas(jugador);
+                        repartirAcumulacion(jugador,acumulacion);
 
                 }
 
@@ -453,25 +463,29 @@ public void comprobarManoJugador(Jugador jugador){
 
 
             //forEach
-        if (acumulacionActivaMasdos){
+        if (acumulacionActiva){
 
-
+            //TE OBLIGA A QUE ELIJAS UN +2 O +4
             for(Carta cartaJugador : manoJugador){
 
                 //comprobamos que halla carta para usar en la mano del jugador +2 o un+4
-                if(cartaJugador.getValor().equalsIgnoreCase(cartaMesa.getValor()) ||
+                if(cartaJugador.getValor().equalsIgnoreCase("+2") ||
                 cartaJugador.getValor().equalsIgnoreCase("+4")) {
 
                     poseerCarta = true;
                 }
 
             }
+
+            //SI NO HAY ACUMULACION ACTIVA ES QUE YA ALGUIEN MAS RECIBIO EL +2
         }else {
+            //PUEDES USAR COLOR DE LA MESA, +2 O COMODIN
                 for(Carta cartaJugador : manoJugador){
 
                     //comprobamos que halla carta para usar en la mano del jugador que sea con respecto al color
                     if(cartaJugador.getColor().equalsIgnoreCase(cartaMesa.getColor()) ||
-                        cartaJugador.getTipo().equalsIgnoreCase("COMODIN")) {
+                            cartaJugador.getValor().equalsIgnoreCase("+2") ||
+                                cartaJugador.getTipo().equalsIgnoreCase("COMODIN")) {
 
                         poseerCarta = true;
                     }
@@ -484,7 +498,7 @@ public void comprobarManoJugador(Jugador jugador){
 
                     //metodo se seguridad para que la carta elegida sea un +2 o +4
 
-                    if (acumulacionActivaMasdos){
+                    if (acumulacionActiva){
                         System.out.println("TIENES CARTA PARA JUGAR");
                         System.out.println();
 
@@ -516,8 +530,8 @@ public void comprobarManoJugador(Jugador jugador){
                     }
 
                 }// LLAVE while
-
-                }else if (!acumulacionActivaMasdos && !acumulacionActivaMasCuatro){
+                        //SI LA ACUMULACION NO ESTA ACTIVA COMPROBARA LA CARTA QUE JUEGUES CON RESPECTO A LA DE LA MESA QUE ES UN +2
+                }else {
 
                     while(!cartaValida) {
                         System.out.println("TIENES CARTA PARA JUGAR");
@@ -555,7 +569,7 @@ public void comprobarManoJugador(Jugador jugador){
             }else {
                     //si el jugador no tiene carta +2 y no hay acumulacion es porque ya alguien recibio ese cumulo
                     //por lo que la cartaMesa seria un +2 pero en el turno no te toca recibir
-                    if(!acumulacionActivaMasdos){
+                    if(!acumulacionActiva){
 
                         repartir1Carta(jugador);
 
@@ -566,17 +580,10 @@ public void comprobarManoJugador(Jugador jugador){
                         comprobarCartaRecibidaEnColor(ultimaCarta,jugador);
 
                         //si hay acumulacion anterior recibe ese cumulo de cartas
-                    } else if (acumulacionActivaMasdos) {
+                    } else {
 
                     repartirAcumulacion(jugador,acumulacion);
 
-                    acumulacionActivaMasdos = false;
-                    acumulacion = 0;
-
-                    //sino recibe solo 2 cartas
-                }else{
-
-                    repartir2Cartas(jugador);
                 }
 
             }
@@ -806,19 +813,16 @@ public void comprobarManoJugador(Jugador jugador){
             //activamos acumulacion si es +4
             if (cartaJugada.getValor().equalsIgnoreCase("+4")){
 
-                // si antes se jugo un +2 y luego se juega un +4 se cancela acumulacion +2
-                //para evitar errores con +2 acumulados
-                if(acumulacionActivaMasdos){
 
-                    acumulacionActivaMasdos = false;
-                }
                     //se puede usar un +4 para un +2 pero no un +2 para un +4
-                if (acumulacionActivaMasdos || acumulacionActivaMasCuatro){
+                if (acumulacionActiva){
 
                     acumulacion += 4;
 
                 }else {
 
+                    //si la acumulacion no esta activa es que ya alguien recibio la acumulacion
+                    acumulacionActiva = true;
                     acumulacion = 4;
                 }
 
@@ -828,8 +832,15 @@ public void comprobarManoJugador(Jugador jugador){
                 //activamos acumulacion si es +2
             }else if (cartaJugada.getValor().equalsIgnoreCase("+2")){
 
-                acumulacionActivaMasdos = true;
-                acumulacion = 2;
+                if (acumulacionActiva){
+
+                    acumulacion +=2 ;
+
+                }else {
+                    //si la acumulacion no estaba activa quiere decir que ya alguien recibio ese +2 y si usas otro +2 se activa de nuevo
+                    acumulacionActiva = true;
+                    acumulacion = 2;
+                }
 
             } else if (cartaJugada.getValor().equalsIgnoreCase("cambio_color")) {
 
@@ -855,7 +866,6 @@ public void comprobarManoJugador(Jugador jugador){
 
                     colorActivo = false;
                 }
-
                 //si antes reversa no esta activo activalo y sino desactivalo
                 if (!reversa){
 
@@ -865,15 +875,14 @@ public void comprobarManoJugador(Jugador jugador){
                     reversa = false;
                 }
 
-
             }else {
 
                 if (colorActivo){
 
                     colorActivo = false;
+
                 }
             }
-
 
 
         }
@@ -1066,6 +1075,8 @@ public void comprobarCartaRecibidaEnSaltar(Carta ultimaCarta,Jugador jugador){
 
 public void recargarMazoMesa(ArrayList<Carta>mazoBasura){
 
+    System.out.println("!RECARGANDO EL MAZO DE LA MESA!");
+
         //añadimos todo el mazoBasura a MazoMesa
         mazoMesa.addAll(mazoBasura);
         //limpiamos maazoBasura
@@ -1136,21 +1147,20 @@ public void recargarMazoMesa(ArrayList<Carta>mazoBasura){
 
             }else {
 
-                System.out.println("Quieres añadir otro jugador ?: ");
+                System.out.println("Quieres añadir otro jugador ?. ESCRIBE SI / NO ");
 
 
                 respuesta = sc.nextLine();
 
             }
 
-
-
+                //SI RESPONDE QUE SI SE SUMA EL INDICE
            if(respuesta.equalsIgnoreCase("si")){
-
 
                i++;
 
-           }else if (respuesta.equalsIgnoreCase("no")){
+               //SI RESPUESTA ES IGUAL A NO
+           }else {
 
                //comprobamos que el minimo sea 2 jugadores
                if( i < 2){
@@ -1159,6 +1169,7 @@ public void recargarMazoMesa(ArrayList<Carta>mazoBasura){
 
                    i++;
 
+                   //SALE DEL BUCLE
                } else {
 
                    salir = true;
@@ -1175,6 +1186,7 @@ public void recargarMazoMesa(ArrayList<Carta>mazoBasura){
 
 //metodo para añadir jugador al hashmap por clave valor
 public void ingresarJugador(Integer clave, String nombre){
+
     jugadores.put(clave,new Jugador(nombre));
     System.out.println("Jugador: " + nombre + " agregado correctamente");
 }
@@ -1228,8 +1240,9 @@ public void ingresarJugador(Integer clave, String nombre){
     //carta de la mesa boca arriba
     public void mostrarCartaMesa(){
 
+        System.out.println();
         System.out.println("LA CARTA DE LA MESA ES: " + cartaMesa.toString());
-
+        System.out.println();
     }
 
 
@@ -1259,41 +1272,9 @@ public void ingresarJugador(Integer clave, String nombre){
 
     }
 
-//METODO QUE REPARTE SOLO 4 CARTAS
 
-    //Aqui puedo crear un metodo para recibir la acumulacion en caso de que este activa
 
-    public void repartir4Cartas(Jugador jugador){
 
-        if (mazoMesa.size() < 50){
-
-            recargarMazoMesa(mazoBasura);
-        }
-
-        System.out.println("El jugador " + jugador.getNombre() + " recibe 4 cartas");
-
-        for (int i = 0; i < 4; i++){
-
-            jugador.recibirCarta(mazoMesa.remove(0));
-        }
-
-    }
-
-    public void repartir2Cartas(Jugador jugador){
-
-        if (mazoMesa.size() < 50){
-
-            recargarMazoMesa(mazoBasura);
-        }
-
-        System.out.println("El jugador " + jugador.getNombre() + " recibe 2 cartas");
-
-        for (int i = 0; i < 2; i++){
-
-            jugador.recibirCarta(mazoMesa.remove(0));
-        }
-
-    }
 
 
     public void repartir1Carta(Jugador jugador){
@@ -1303,9 +1284,9 @@ public void ingresarJugador(Integer clave, String nombre){
             recargarMazoMesa(mazoBasura);
         }
 
-        System.out.println("El jugador " + jugador.getNombre() + " recibe 1 carta");
-
         jugador.recibirCarta(mazoMesa.remove(0));
+
+        System.out.println("El Jugador " + jugador.getNombre() + " Recibe 1 Carta y Pierde El Turno!");
 
     }
 
@@ -1318,18 +1299,13 @@ public void ingresarJugador(Integer clave, String nombre){
 
     for(int i = 0; i < acumulado; i++){
 
-        if (mazoMesa.size() < 50){
-
-            recargarMazoMesa(mazoBasura);
+        jugador.recibirCarta(mazoMesa.remove(0));
 
         }
 
-        jugador.recibirCarta(mazoMesa.remove(0));
-
-    }
+        System.out.println("El Jugador " + jugador.getNombre() + " Recibe " + acumulado + " Cartas y Pierde El Turno!");
             //al repartir lo acumulado todo vuelve a inicio
-        acumulacionActivaMasdos = false;
-        acumulacionActivaMasCuatro = false;
+        acumulacionActiva = false;
         acumulacion = 0;
 
 

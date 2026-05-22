@@ -12,6 +12,7 @@ public class Jugador {
     private int bank = 0;  // por si queremos añadir apuesta
     public Scanner sc = new Scanner(System.in);
 
+
     public Jugador(String nombre){
 
         this.nombre = nombre;
@@ -24,6 +25,21 @@ public class Jugador {
 
 
 
+
+
+public void cargarColoresLetra(ArrayList<String>colores){
+    colores.add("\u001B[31m");
+    colores.add("\u001B[0m");
+    colores.add("\u001B[32m" );
+    colores.add("\u001B[0m");
+    colores.add("\u001B[33m");
+    colores.add("\u001B[0m");
+    colores.add("\u001B[34m");
+    colores.add("\u001B[0m");
+    colores.add("\u001B[35m");
+    colores.add("\u001B[0m");
+
+}
 
     //METODO QUE RETORNA CARTA, DENTRO DE EL SE MUESTRA CARTA MANOJUGADOR Y SE RETORNA LA CARTA ELEGIDA
     //USAMOS SCANNER Y METODO mostrarMano()
@@ -64,16 +80,53 @@ public class Jugador {
    }
 
 
-    //METODO QUE IMPRIME POR PANTALLA LAS CARTAS DEL JUGADOR
+
+
+
+
+    //METODO QUE IMPRIME POR PANTALLA LAS CARTAS DEL JUGADOR INCLUYENDO COLORES DX
 
     public void mostrarMano(){
 
+        //CREAMOS ARRAY CON LOS STRINGS//CODIGOS DE COLOR
+        ArrayList<String>colores = new ArrayList<>();
+
+        //CARGAMOS STRINGS
+        cargarColoresLetra(colores);
+
         for(int i = 0; i < mano.size(); i++){
 
-            System.out.println( "(" + (i+1) +")"  + mano.get(i).toString());
+            if (mano.get(i).getColor().equalsIgnoreCase("ROJO")){
+
+                System.out.println( "(" + (i+1) +")"  + mano.get(i).toStringSuper(colores.get(0),colores.get(1)));
+
+            } else if (mano.get(i).getColor().equalsIgnoreCase("VERDE")){
+
+                System.out.println( "(" + (i+1) +")"  + mano.get(i).toStringSuper(colores.get(2),colores.get(3)));
+                
+
+                } else if (mano.get(i).getColor().equalsIgnoreCase("AMARILLO")) {
+
+                System.out.println( "(" + (i+1) +")"  + mano.get(i).toStringSuper(colores.get(4),colores.get(5)));
+                
+            } else if (mano.get(i).getColor().equalsIgnoreCase("AZUL")) {
+
+                System.out.println( "(" + (i+1) +")"  + mano.get(i).toStringSuper(colores.get(6),colores.get(7)));
+            }else {
+
+                System.out.println( "(" + (i+1) +")"  + mano.get(i).toStringSuper(colores.get(8),colores.get(9)));
+        }
+
+
         }
 
     }
+
+
+
+
+
+
 
     //Metodo para añadir carta a mano del jugador
     public void recibirCarta(Carta carta){
