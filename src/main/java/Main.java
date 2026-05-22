@@ -48,8 +48,7 @@ public class Main {
                 partida1.ingresarJugador(2,"PEDRO");
 
                 partida1.getJugadores().get(1).añadirCartaPrueba(new Carta(1,"ESPECIAL","+4","COMODIN"));
-                partida1.getJugadores().get(1).añadirCartaPrueba(new Carta(1,"ESPECIAL","+4","COMODIN"));
-                partida1.getJugadores().get(1).añadirCartaPrueba(new Carta(1,"ESPECIAL","+4","COMODIN"));
+
 
             partida1.getJugadores().get(2).añadirCartaPrueba(new Carta(1,"ESPECIAL","+4","COMODIN"));
             partida1.getJugadores().get(2).añadirCartaPrueba(new Carta(1,"ESPECIAL","+4","COMODIN"));

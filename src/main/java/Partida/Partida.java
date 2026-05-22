@@ -324,7 +324,7 @@ public void comprobarManoJugador(Jugador jugador){
                 }
                     if (!acumulacionActiva && colorActivo){
 
-                        if ( cartaJugador.getValor().equalsIgnoreCase(color)){
+                        if ( cartaJugador.getColor().equalsIgnoreCase(color)){
 
                             poseerCarta = true;
                         }
