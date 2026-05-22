@@ -47,9 +47,10 @@ public class Partida {
         //tambien cuantos jugadores quieres ingresar
         //tambien condiciones de maximo 4 jugadores y minimo 2
 
-        crearJugadores();
+       // crearJugadores();
 
         repartirMazoMesa();
+
         //este metodo te muestra los jugadores registrados
         mostrarJugadores();
 
@@ -77,12 +78,23 @@ public class Partida {
             comprobarGanador(jugadores.get(clave));
 
 
+                if(jugadores.size() == 2){
+
+                   clave =  comprobarSentido2P(clave);
+
+                    reversa = false;
+
+                    }
+
             mostrarCartaMesa();
 
-
             //retorna el sentido si es NORMAL dara el siguiente jugador si es REVERSA dara el anterior
+
+            if (jugadores.size() > 2){
+
             clave = comprobarSentido(clave);
 
+            }
 
         }// llave while
 
@@ -107,8 +119,30 @@ public class Partida {
 
         comprobarManoJugador(jugador);
 
+    }
+
+
+    public int comprobarSentido2P(int posActual){
+
+        if(reversa){
+
+            return posActual;
+
+        } else {
+            //si posicion actual es la ultima posicion dame la primera
+            if (posActual == jugadores.size()) {
+
+                return 1;
+            }
+            //sino dame la posicion siguiente
+            return posActual + 1;
+        }
+
 
     }
+
+
+
 
 
     public int comprobarSentido(int posActual) {
