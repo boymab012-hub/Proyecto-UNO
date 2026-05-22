@@ -52,7 +52,8 @@ public void inicarPartida(){
     // este metodo te pregunta el nombre que quieres poner al jugador
     //tambien cuantos jugadores quieres ingresar
     //tambien condiciones de maximo 4 jugadores y minimo 2
-    crearJugadores();
+
+   // crearJugadores();
 
     repartirMazoMesa();
     //este metodo te muestra los jugadores registrados
@@ -104,7 +105,7 @@ public void comprobarGanador(Jugador jugador){
 
         partidaActiva = false;
 
-        System.out.println("EL JUGADOR: " + jugador.getNombre() + " HA GANADO LA PARTIDA");
+        System.out.println("\u001B[93m👑🏆 VICTORIA: " + jugador.getNombre() + " 🏆👑\u001B[0m");
 
     }
 }
@@ -1234,16 +1235,85 @@ public void ingresarJugador(Integer clave, String nombre){
 
 
 
-//-----------------METODOS POR IMPLEMENTAR LOGICA-----------------
+
+
+
+
+
+
+
+    //-----------------------METODO  DE toString PROPIO------------------------
+    public void cargarColoresLetra(ArrayList<String>colores){
+        colores.add("\u001B[31m");
+        colores.add("\u001B[0m");
+        colores.add("\u001B[32m" );
+        colores.add("\u001B[0m");
+        colores.add("\u001B[33m");
+        colores.add("\u001B[0m");
+        colores.add("\u001B[34m");
+        colores.add("\u001B[0m");
+        colores.add("\u001B[35m");
+        colores.add("\u001B[0m");
+
+    }
+
+
 
 
     //carta de la mesa boca arriba
     public void mostrarCartaMesa(){
 
+        //CREAMOS ARRAY CON LOS STRINGS//CODIGOS DE COLOR
+        ArrayList<String>colores = new ArrayList<>();
+
+        //CARGAMOS STRINGS
+        cargarColoresLetra(colores);
+
         System.out.println();
-        System.out.println("LA CARTA DE LA MESA ES: " + cartaMesa.toString());
+        aplicarColoresLetra(cartaMesa,colores);
         System.out.println();
     }
+
+
+
+    public void aplicarColoresLetra(Carta cartaIngresada,ArrayList<String>colores){
+
+        if (cartaIngresada.getColor().equalsIgnoreCase("ROJO")){
+
+            System.out.println("LA CARTA DE LA MESA ES: " + cartaIngresada.toStringSuper(colores.get(0),colores.get(1)));
+
+        } else if (cartaIngresada.getColor().equalsIgnoreCase("VERDE")){
+
+            System.out.println("LA CARTA DE LA MESA ES: " + cartaIngresada.toStringSuper(colores.get(2),colores.get(3)));
+
+
+        } else if (cartaIngresada.getColor().equalsIgnoreCase("AMARILLO")) {
+
+            System.out.println("LA CARTA DE LA MESA ES: " + cartaIngresada.toStringSuper(colores.get(4),colores.get(5)));
+
+        } else if (cartaIngresada.getColor().equalsIgnoreCase("AZUL")) {
+
+            System.out.println("LA CARTA DE LA MESA ES: " + cartaIngresada.toStringSuper(colores.get(6),colores.get(7)));
+        }else {
+
+            System.out.println("LA CARTA DE LA MESA ES: " + cartaIngresada.toStringSuper(colores.get(8),colores.get(9)));
+        }
+
+
+    }
+
+
+//-----------↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑METODOS toString PROPIO---------↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1311,8 +1381,31 @@ public void ingresarJugador(Integer clave, String nombre){
 
     }
 
+    public ArrayList<Carta> getMazoMesa() {
+        return mazoMesa;
+    }
 
-/* --------------------NUEVAS IMPLEMENTACIONES QUE FALTAN------
+    public Carta getCartaMesa() {
+        return cartaMesa;
+    }
+
+    public HashMap<Integer, Jugador> getJugadores() {
+        return jugadores;
+    }
+
+    public boolean isColorActivo() {
+        return colorActivo;
+    }
+
+    public void setColorActivo(boolean colorActivo) {
+        this.colorActivo = colorActivo;
+    }
+
+    public void setAcumulacionActiva(boolean acumulacionActiva) {
+        this.acumulacionActiva = acumulacionActiva;
+    }
+
+    /* --------------------NUEVAS IMPLEMENTACIONES QUE FALTAN------
 1.COMPROBACION DE masoMeza Si esta vacio   -- listo
 2.INSERTAR EFECTO DE SALTAR -- listo
 3.INSERTAR EFECTO DE REVERSA -- listo

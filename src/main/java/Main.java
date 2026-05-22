@@ -43,9 +43,20 @@ public class Main {
 
 
         Partida partida1 = new Partida();
-        partida1.inicarPartida();
+
+                partida1.ingresarJugador(1,"Darwin");
+                partida1.ingresarJugador(2,"PEDRO");
+
+                partida1.getJugadores().get(1).añadirCartaPrueba(new Carta(1,"ESPECIAL","+4","COMODIN"));
+                partida1.getJugadores().get(1).añadirCartaPrueba(new Carta(1,"ESPECIAL","+4","COMODIN"));
+                partida1.getJugadores().get(1).añadirCartaPrueba(new Carta(1,"ESPECIAL","+4","COMODIN"));
+
+            partida1.getJugadores().get(2).añadirCartaPrueba(new Carta(1,"ESPECIAL","+4","COMODIN"));
+            partida1.getJugadores().get(2).añadirCartaPrueba(new Carta(1,"ESPECIAL","+4","COMODIN"));
+            partida1.getJugadores().get(2).añadirCartaPrueba(new Carta(1,"ESPECIAL","+4","COMODIN"));
 
 
+            partida1.inicarPartida();
 
 
     }

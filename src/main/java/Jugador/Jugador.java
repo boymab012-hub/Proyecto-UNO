@@ -96,29 +96,39 @@ public void cargarColoresLetra(ArrayList<String>colores){
 
         for(int i = 0; i < mano.size(); i++){
 
-            if (mano.get(i).getColor().equalsIgnoreCase("ROJO")){
-
-                System.out.println( "(" + (i+1) +")"  + mano.get(i).toStringSuper(colores.get(0),colores.get(1)));
-
-            } else if (mano.get(i).getColor().equalsIgnoreCase("VERDE")){
-
-                System.out.println( "(" + (i+1) +")"  + mano.get(i).toStringSuper(colores.get(2),colores.get(3)));
-                
-
-                } else if (mano.get(i).getColor().equalsIgnoreCase("AMARILLO")) {
-
-                System.out.println( "(" + (i+1) +")"  + mano.get(i).toStringSuper(colores.get(4),colores.get(5)));
-                
-            } else if (mano.get(i).getColor().equalsIgnoreCase("AZUL")) {
-
-                System.out.println( "(" + (i+1) +")"  + mano.get(i).toStringSuper(colores.get(6),colores.get(7)));
-            }else {
-
-                System.out.println( "(" + (i+1) +")"  + mano.get(i).toStringSuper(colores.get(8),colores.get(9)));
-        }
+            //ENVIAMOS LA CARTA, UN INDICE, Y EL ARRAYLIST CON LOS STRING DE COLORES
+                aplicarColoresLetra(mano.get(i),i,colores);
 
 
         }
+
+    }
+
+
+    //METODO EXTRA PARA APLICAR COLORS AL SUPERtoString
+    public void aplicarColoresLetra(Carta carta, int i,ArrayList<String>colores){
+
+        if (carta.getColor().equalsIgnoreCase("ROJO")){
+
+            System.out.println( "(" + (i+1) +")"  + mano.get(i).toStringSuper(colores.get(0),colores.get(1)));
+
+        } else if (carta.getColor().equalsIgnoreCase("VERDE")){
+
+            System.out.println( "(" + (i+1) +")"  + mano.get(i).toStringSuper(colores.get(2),colores.get(3)));
+
+
+        } else if (carta.getColor().equalsIgnoreCase("AMARILLO")) {
+
+            System.out.println( "(" + (i+1) +")"  + mano.get(i).toStringSuper(colores.get(4),colores.get(5)));
+
+        } else if (carta.getColor().equalsIgnoreCase("AZUL")) {
+
+            System.out.println( "(" + (i+1) +")"  + mano.get(i).toStringSuper(colores.get(6),colores.get(7)));
+        }else {
+
+            System.out.println( "(" + (i+1) +")"  + mano.get(i).toStringSuper(colores.get(8),colores.get(9)));
+        }
+
 
     }
 
@@ -147,6 +157,11 @@ public void cargarColoresLetra(ArrayList<String>colores){
         return bank;
     }
 
+        public void añadirCartaPrueba(Carta carta){
 
+        this.mano.add(carta);
+
+
+        }
 
 }
