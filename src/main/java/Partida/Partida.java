@@ -113,20 +113,9 @@ public class Partida {
 
     public int comprobarSentido(int posActual) {
 
-
-        if (jugadores.size() == 2){
-
-            if (posActual == 1){
-
-                return 1;
-            }else{
-
-                return 2;
-            }
-
-        }
         if (reversa) {
             //si posicion actual es 1 dame la ultima posicion
+
             if (posActual == 1) {
 
                 return jugadores.size();
