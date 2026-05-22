@@ -806,87 +806,7 @@ public void comprobarManoJugador(Jugador jugador){
 
 
 
-        //METODO PARA APLICAR AFECTOS DE CARTA
-        public void ejecutarCartaJugada(Carta cartaJugada){
 
-
-            //estas acumulaciones son para luego si el siguiente jugador tiene +4 o +2  se sigue acumulando
-            //activamos acumulacion si es +4
-            if (cartaJugada.getValor().equalsIgnoreCase("+4")){
-
-
-                    //se puede usar un +4 para un +2 pero no un +2 para un +4
-                if (acumulacionActiva){
-
-                    acumulacion += 4;
-
-                }else {
-
-                    //si la acumulacion no esta activa es que ya alguien recibio la acumulacion
-                    acumulacionActiva = true;
-                    acumulacion = 4;
-                }
-
-
-                activarColorMesa();
-
-                //activamos acumulacion si es +2
-            }else if (cartaJugada.getValor().equalsIgnoreCase("+2")){
-
-                if (acumulacionActiva){
-
-                    acumulacion +=2 ;
-
-                }else {
-                    //si la acumulacion no estaba activa quiere decir que ya alguien recibio ese +2 y si usas otro +2 se activa de nuevo
-                    acumulacionActiva = true;
-                    acumulacion = 2;
-                }
-
-            } else if (cartaJugada.getValor().equalsIgnoreCase("cambio_color")) {
-
-
-                activarColorMesa();
-
-                //NUEVA IMPLEMENTACION PARA CARTA SALTAR
-            }else if (cartaJugada.getValor().equalsIgnoreCase("SALTAR")){
-
-                //metodo de seguridad para que saltar este en true
-                    if(colorActivo){
-
-                        colorActivo = false;
-                    }
-
-                    saltar = true;
-
-
-                //NUEVA IMPLEMENTACION PARA CARTA REVERSA
-            } else if (cartaJugada.getValor().equalsIgnoreCase("REVERSA")){
-
-                if (colorActivo){
-
-                    colorActivo = false;
-                }
-                //si antes reversa no esta activo activalo y sino desactivalo
-                if (!reversa){
-
-                    reversa = true;
-                }else {
-
-                    reversa = false;
-                }
-
-            }else {
-
-                if (colorActivo){
-
-                    colorActivo = false;
-
-                }
-            }
-
-
-        }
 
 
 
@@ -963,6 +883,90 @@ public void comprobarManoJugador(Jugador jugador){
             }
 
         }
+
+
+
+    //METODO PARA APLICAR AFECTOS DE CARTA
+    public void ejecutarCartaJugada(Carta cartaJugada){
+
+
+        //estas acumulaciones son para luego si el siguiente jugador tiene +4 o +2  se sigue acumulando
+        //activamos acumulacion si es +4
+        if (cartaJugada.getValor().equalsIgnoreCase("+4")){
+
+
+            //se puede usar un +4 para un +2 pero no un +2 para un +4
+            if (acumulacionActiva){
+
+                acumulacion += 4;
+
+            }else {
+
+                //si la acumulacion no esta activa es que ya alguien recibio la acumulacion
+                acumulacionActiva = true;
+                acumulacion = 4;
+            }
+
+
+            activarColorMesa();
+
+            //activamos acumulacion si es +2
+        }else if (cartaJugada.getValor().equalsIgnoreCase("+2")){
+
+            if (acumulacionActiva){
+
+                acumulacion +=2 ;
+
+            }else {
+                //si la acumulacion no estaba activa quiere decir que ya alguien recibio ese +2 y si usas otro +2 se activa de nuevo
+                acumulacionActiva = true;
+                acumulacion = 2;
+            }
+
+        } else if (cartaJugada.getValor().equalsIgnoreCase("cambio_color")) {
+
+
+            activarColorMesa();
+
+            //NUEVA IMPLEMENTACION PARA CARTA SALTAR
+        }else if (cartaJugada.getValor().equalsIgnoreCase("SALTAR")){
+
+            //metodo de seguridad para que saltar este en true
+            if(colorActivo){
+
+                colorActivo = false;
+            }
+
+            saltar = true;
+
+
+            //NUEVA IMPLEMENTACION PARA CARTA REVERSA
+        } else if (cartaJugada.getValor().equalsIgnoreCase("REVERSA")){
+
+            if (colorActivo){
+
+                colorActivo = false;
+            }
+            //si antes reversa no esta activo activalo y sino desactivalo
+            if (!reversa){
+
+                reversa = true;
+            }else {
+
+                reversa = false;
+            }
+
+        }else {
+
+            if (colorActivo){
+
+                colorActivo = false;
+
+            }
+        }
+
+
+    }
 
 
 
@@ -1344,9 +1348,6 @@ public void ingresarJugador(Integer clave, String nombre){
 
 
 
-
-
-
     public void repartir1Carta(Jugador jugador){
 
         if (mazoMesa.size() < 50){
@@ -1377,6 +1378,11 @@ public void ingresarJugador(Integer clave, String nombre){
             //al repartir lo acumulado todo vuelve a inicio
         acumulacionActiva = false;
         acumulacion = 0;
+
+
+
+
+
 
 
     }
