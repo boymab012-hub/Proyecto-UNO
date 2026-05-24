@@ -51,15 +51,15 @@ public class Main {
         partida1.getJugadores().get(1).añadirCartaPrueba(new Carta(1,"VERDE","REVERSA","ACCION"));
         partida1.getJugadores().get(1).añadirCartaPrueba(new Carta(2,"AZUL","REVERSA","ACCION"));
         partida1.getJugadores().get(1).añadirCartaPrueba(new Carta(3,"AMARILLO","REVERSA","ACCION"));
-        partida1.getJugadores().get(2).añadirCartaPrueba(new Carta(4,"ROJO","REVERSA","ACCION"));
-        partida1.getJugadores().get(1).añadirCartaPrueba(new Carta(5,"VERDE","REVERSA","ACCION"));
+        //partida1.getJugadores().get(2).añadirCartaPrueba(new Carta(4,"ROJO","REVERSA","ACCION"));
+        partida1.getJugadores().get(1).añadirCartaPrueba(new Carta(5,"ESPECIAL","CAMBIO_COLOR","COMODIN"));
         partida1.getJugadores().get(1).añadirCartaPrueba(new Carta(6,"AZUL","REVERSA","ACCION"));
         partida1.getJugadores().get(1).añadirCartaPrueba(new Carta(7,"AMARILLO","REVERSA","ACCION"));
-        partida1.getJugadores().get(2).añadirCartaPrueba(new Carta(8,"ROJO","REVERSA","ACCION"));
+        //partida1.getJugadores().get(2).añadirCartaPrueba(new Carta(8,"ROJO","REVERSA","ACCION"));
         partida1.getJugadores().get(1).añadirCartaPrueba(new Carta(9,"VERDE","REVERSA","ACCION"));
         partida1.getJugadores().get(1).añadirCartaPrueba(new Carta(10,"AZUL","REVERSA","ACCION"));
         partida1.getJugadores().get(1).añadirCartaPrueba(new Carta(11,"AMARILLO","REVERSA","ACCION"));
-        partida1.getJugadores().get(2).añadirCartaPrueba(new Carta(12,"ROJO","REVERSA","ACCION"));
+        //partida1.getJugadores().get(2).añadirCartaPrueba(new Carta(12,"ROJO","REVERSA","ACCION"));
 
 
 

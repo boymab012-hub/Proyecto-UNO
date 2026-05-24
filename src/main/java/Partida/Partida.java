@@ -82,8 +82,6 @@ public class Partida {
 
                    clave =  comprobarSentido2P(clave);
 
-                    reversa = false;
-
                     }
 
             mostrarCartaMesa();
@@ -126,7 +124,11 @@ public class Partida {
 
         if(reversa){
 
+            reversa = false;
+
             return posActual;
+
+
 
         } else {
             //si posicion actual es la ultima posicion dame la primera
@@ -233,11 +235,13 @@ public class Partida {
         cargarColoresLetra(colores);
         Scanner sc = new Scanner(System.in);
 
-        String respuesta;
+        String respuesta = "";
+
+        boolean colorValido= false;
 
 
         //metodo de seguridad para elegir solo entre los 4 colores
-        do {
+        while (!colorValido){
             System.out.println("↓↓↓↓↓↓↓ ¿ QUE COLOR QUIERES QUE HALLA EN LA MESA ?↓↓↓↓↓↓↓");
             System.out.println();
 
@@ -255,28 +259,25 @@ public class Partida {
                     !respuesta.equalsIgnoreCase("amarillo")) {
 
                 System.out.println("EL COLOR ELEGIDO NO ES VALIDO ");
+            }else {
+
+                colorValido = true;
+
             }
-
-
-        } while (!respuesta.equalsIgnoreCase("rojo") &&
-                !respuesta.equalsIgnoreCase("azul") &&
-                !respuesta.equalsIgnoreCase("verde") &&
-                !respuesta.equalsIgnoreCase("amarillo"));
+        }
 
 
         if (respuesta.equalsIgnoreCase("rojo")) {
-            colorActivo = true;
             color = "rojo";
         } else if (respuesta.equalsIgnoreCase("Azul")) {
-            colorActivo = true;
             color = "azul";
         } else if (respuesta.equalsIgnoreCase("Verde")) {
-            colorActivo = true;
             color = "verde";
         } else {
-            colorActivo = true;
             color = "amarillo";
         }
+
+        colorActivo = true;
 
         aplicarColoresActivarColor(color,colores);
         System.out.println();
@@ -441,7 +442,7 @@ public class Partida {
                 Carta ultimaCarta = manoJugador.get(manoJugador.size() - 1);
 
                 //si la ultima carta que recibe es (color o comodin) la podra usar o guardar
-                comprobarCartaRecibidaEnColor(ultimaCarta, jugador);
+                comprobarCartaRecibida(ultimaCarta, jugador);
 
 
                 //si hay acumulacion o no recibira las cartas que correspondan
@@ -589,7 +590,7 @@ public class Partida {
                 Carta ultimaCarta = manoJugador.get(manoJugador.size() - 1);
 
                 //si la ultima carta que recibe es (color o comodin) la podra usar o guardar
-                comprobarCartaRecibidaEnColor(ultimaCarta, jugador);
+                comprobarCartaRecibida(ultimaCarta, jugador);
 
                 //si hay acumulacion anterior recibe ese cumulo de cartas
             } else {
@@ -660,7 +661,7 @@ public class Partida {
             Carta ultimaCarta = manoJugador.get(manoJugador.size() - 1);
 
             //si la ultima carta que recibe es (color o comodin) la podra usar o guardar
-            comprobarCartaRecibidaEnColor(ultimaCarta, jugador);
+            comprobarCartaRecibida(ultimaCarta, jugador);
 
         }
 
@@ -729,7 +730,7 @@ public class Partida {
                 //obtenemos la ultima carta recibida
                 Carta ultimaCarta = manoJugador.get(jugador.getMano().size() - 1);
 
-                comprobarCartaRecibidaEnSaltar(ultimaCarta, jugador);
+                comprobarCartaRecibida(ultimaCarta, jugador);
 
 
             }
@@ -805,7 +806,7 @@ public class Partida {
                 //obtenemos la ultima carta recibida
                 Carta ultimaCarta = jugador.getMano().get(jugador.getMano().size() - 1);
 
-                comprobarCartaRecibidaEnReversa(ultimaCarta, jugador);
+                comprobarCartaRecibida(ultimaCarta, jugador);
 
 
             }
@@ -884,7 +885,7 @@ public class Partida {
 
             Carta ultimaCarta = manoJugador.get(manoJugador.size() - 1);
 
-            comprobarCartaRecibidaEnNumero(ultimaCarta, jugador);
+            comprobarCartaRecibida(ultimaCarta, jugador);
 
         }
 
@@ -969,63 +970,22 @@ public class Partida {
 
             }
         }
-
-
     }
 
 
-    public void comprobarCartaRecibidaEnNumero(Carta ultimaCarta, Jugador jugador) {
+    public void comprobarCartaRecibida(Carta ultimaCarta, Jugador jugador){
 
 
-        if (ultimaCarta.getValor().equalsIgnoreCase(cartaMesa.getValor()) ||
-                ultimaCarta.getColor().equalsIgnoreCase(cartaMesa.getColor())) {
-
-            eleccionCartaRecibida(ultimaCarta, jugador);
-        }
-    }
-
-
-    public void comprobarCartaRecibidaEnReversa(Carta ultimaCarta, Jugador jugador) {
-
-        if (ultimaCarta.getValor().equalsIgnoreCase("REVERSA") ||
-                ultimaCarta.getColor().equalsIgnoreCase(cartaMesa.getColor()) ||
-                ultimaCarta.getTipo().equalsIgnoreCase("COMODIN")) {
-
+        if(ultimaCarta.getValor().equalsIgnoreCase(cartaMesa.getValor()) ||
+        ultimaCarta.getColor().equalsIgnoreCase(cartaMesa.getColor())){
 
             eleccionCartaRecibida(ultimaCarta, jugador);
 
+        }else {
+
+            mostrarCartaRecibida(ultimaCarta);
 
         }
-
-
-    }
-
-    public void comprobarCartaRecibidaEnSaltar(Carta ultimaCarta, Jugador jugador) {
-
-        //si la carta recibida es igual a saltar o tenga un color igual o sea un comodin se podra jusar
-        if (ultimaCarta.getTipo().equalsIgnoreCase("COMODIN") ||
-                ultimaCarta.getValor().equalsIgnoreCase("SALTAR") ||
-                ultimaCarta.getColor().equalsIgnoreCase(cartaMesa.getColor())) {
-
-            eleccionCartaRecibida(ultimaCarta, jugador);
-
-
-        }
-    }
-
-
-    //AVISAR SI CARTA RECIBIDA SE PUEDE JUGAR O NO,TENIENDO EN CUENTA EL COLOR ACTIVO
-    public void comprobarCartaRecibidaEnColor(Carta ultimaCarta, Jugador jugador) {
-
-        //si la ultima carta que recibo se puede usar  (color o comodin)
-
-        if (ultimaCarta.getTipo().equalsIgnoreCase("comodin") ||
-                ultimaCarta.getColor().equalsIgnoreCase(color)) {
-
-            eleccionCartaRecibida(ultimaCarta, jugador);
-
-        }
-
     }
 
 
@@ -1035,7 +995,9 @@ public class Partida {
         Scanner sc = new Scanner(System.in);
 
         System.out.println("LA CARTA QUE RECIBISTE ES: " + ultimaCarta.toString());
+        System.out.println();
         System.out.println("PUEDES USARLA O QUEDARTELA QUE OPCION ELIGES ?");
+        System.out.println();
         System.out.println("OPCION 1 - USAR CARTA ");
         System.out.println("OPCION 2 - CONSERVAR CARTA");
 
@@ -1062,6 +1024,7 @@ public class Partida {
 
         } else {
 
+            System.out.println();
             System.out.println("HAZ DECIDIDO CONSERVAR TU CARTA !");
 
         }
@@ -1202,26 +1165,6 @@ public class Partida {
     }
 
 
-            /*
-    public void mostrarJugadoresActivos(){
-
-        for (Map.Entry<Integer,Jugador> entry : jugadores.entrySet()){
-
-            Integer clave = entry.getKey();
-            Jugador jugador = entry.getValue();
-
-            if (jugador.getJugadorActivo()){
-
-            System.out.println("Jugador: " + clave +" Nombre: " + jugador.getNombre());
-
-            }
-
-        }
-
-    }
-*/
-
-
     //--------↑↑↑↑↑↑↑↑↑↑ METODOS PARA ADMINISTRAR JUGADORES ↑↑↑↑↑↑↑↑↑↑-----
 
 
@@ -1239,6 +1182,25 @@ public class Partida {
         colores.add("\u001B[0m");
 
     }
+
+
+
+
+
+    public void mostrarCartaRecibida(Carta cartaRecibida){
+
+        //CREAMOS ARRAY CON LOS STRINGS//CODIGOS DE COLOR
+        ArrayList<String> colores = new ArrayList<>();
+
+        //CARGAMOS STRINGS
+        cargarColoresLetra(colores);
+
+        System.out.println();
+        aplicarColoresLetra(cartaRecibida, colores);
+        System.out.println();
+
+    }
+
 
 
     //carta de la mesa boca arriba
@@ -1279,6 +1241,10 @@ public class Partida {
             System.out.println("LA CARTA DE LA MESA ES: " + cartaIngresada.toStringSuper(colores.get(8), colores.get(9)));
         }
 
+        if (colorActivo){
+
+            System.out.println("Y EL COLOR ACTIVO ES: " + color.toUpperCase());
+        }
 
     }
 
@@ -1291,10 +1257,6 @@ public class Partida {
     //Repartimos 7 cartas a cada jugador, Recorriendo el hashmap y usando metodo recibir carta de Jugador
     public void repartirMazoMesa() {
 
-        if (mazoMesa.size() < 50) {
-
-            recargarMazoMesa(mazoBasura);
-        }
 
         //Recorremos el hashmap y en cada vuelta dentro del for añadimos 7 cartas
         for (Jugador jugador : jugadores.values()) {
@@ -1311,7 +1273,7 @@ public class Partida {
 
     public void repartir1Carta(Jugador jugador) {
 
-        if (mazoMesa.size() < 50) {
+        if (mazoMesa.isEmpty()) {
 
             recargarMazoMesa(mazoBasura);
         }
@@ -1324,12 +1286,14 @@ public class Partida {
 
     public void repartirAcumulacion(Jugador jugador, int acumulado) {
 
-        if (mazoMesa.size() < 50) {
 
-            recargarMazoMesa(mazoBasura);
-        }
 
         for (int i = 0; i < acumulado; i++) {
+
+            if (mazoMesa.isEmpty()) {
+
+                recargarMazoMesa(mazoBasura);
+            }
 
             jugador.recibirCarta(mazoMesa.remove(0));
 
