@@ -1,4 +1,4 @@
-package CartaDAO;
+package DAOCarta;
 
 import Carta.Carta;
 import ConexionBD.ConexionBD;
@@ -67,7 +67,6 @@ public class DaoCarta {
             //cerramos conexiones
             rs.close();
             st.close();
-            con.close();
 
             System.out.println("Mazo cargado : " + mazo.size() + " Cartas");
 

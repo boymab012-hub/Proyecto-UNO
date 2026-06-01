@@ -18,6 +18,18 @@ public class Jugador {
 
     }
 
+
+
+
+    // Para cuando el DAO lee un jugador de la base de datos (con id)
+    public Jugador(int id, String nombre) {
+        this.id = id;
+        this.nombre = nombre;
+        this.mano = new ArrayList<>();
+    }
+
+
+
     //METODOS IMPORTANTES PRINCIPALES!!!
 
 
@@ -132,6 +144,8 @@ public class Jugador {
         mano.add(carta);
     }
 
+
+    public int getId() {return id; }
 
     public String getNombre() {
         return nombre;

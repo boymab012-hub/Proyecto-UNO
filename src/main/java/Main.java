@@ -41,8 +41,8 @@ public class Main {
 */
 
 
+/*
 
-        Partida partida1 = new Partida();
 
                 partida1.ingresarJugador(1,"Darwin");
                 partida1.ingresarJugador(2,"PEDRO");
@@ -60,10 +60,10 @@ public class Main {
         partida1.getJugadores().get(1).añadirCartaPrueba(new Carta(10,"AZUL","REVERSA","ACCION"));
         partida1.getJugadores().get(1).añadirCartaPrueba(new Carta(11,"AMARILLO","REVERSA","ACCION"));
         //partida1.getJugadores().get(2).añadirCartaPrueba(new Carta(12,"ROJO","REVERSA","ACCION"));
+        */
 
 
-
-
+        Partida partida1 = new Partida();
         partida1.inicarPartida();
 
 

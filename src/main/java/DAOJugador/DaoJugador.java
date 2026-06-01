@@ -1,4 +1,4 @@
-package JugadorDao;
+package DAOJugador;
 
 public class DaoJugador {
 

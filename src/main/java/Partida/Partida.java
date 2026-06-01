@@ -1,9 +1,12 @@
 package Partida;
 
 import Carta.Carta;
-import CartaDAO.DaoCarta;
+import DAOCarta.DaoCarta;
+import DAORanking.DaoRanking;
+import EntradaRanking.EntradaRanking;
 import Jugador.Jugador;
 
+import java.sql.SQLException;
 import java.util.*;
 
 public class Partida {
@@ -20,6 +23,7 @@ public class Partida {
     private String color;
     private HashMap<Integer, Jugador> jugadores;
     private boolean partidaActiva = true;
+    private DaoRanking daoRanking = new DaoRanking();
 
 
     public Partida() {
@@ -38,6 +42,9 @@ public class Partida {
     }
 
 
+
+
+
 //AQUI INICIAMOS TODO EL JUEGO PARA UN MAIN LIMPIO DX.
 
     public void inicarPartida() {
@@ -47,7 +54,7 @@ public class Partida {
         //tambien cuantos jugadores quieres ingresar
         //tambien condiciones de maximo 4 jugadores y minimo 2
 
-       // crearJugadores();
+        crearJugadores();
 
         repartirMazoMesa();
 
@@ -75,6 +82,8 @@ public class Partida {
 
             turnoJugador(jugadores.get(clave));
 
+            mostrarCartaMesa();
+
             comprobarGanador(jugadores.get(clave));
 
             //SI LA PARTIDA CAMBIA A INACTIVA NO SE EJECUTA Y TERMINA PARTIDA
@@ -87,7 +96,6 @@ public class Partida {
 
                     }
 
-            mostrarCartaMesa();
 
             //retorna el sentido si es NORMAL dara el siguiente jugador si es REVERSA dara el anterior
 
@@ -120,6 +128,9 @@ public class Partida {
 
 
 */
+
+
+    //-----------------------------------------------------COMPROBAR RANKING TAMBIEN -----------
     public void comprobarGanador(Jugador jugador) {
 
 
@@ -129,9 +140,39 @@ public class Partida {
 
             System.out.println("\u001B[93m👑🏆 VICTORIA: " + jugador.getNombre() + " 🏆👑\u001B[0m");
 
+            // ── RANKING ──────────────────────────────────────
+            try {
+                // Registrar ganador
+                daoRanking.registrarResultado(jugador.getNombre(), true);
 
+                // Registrar perdedores
+                for (Jugador j : jugadores.values()) {
+                    if (!j.getNombre().equals(jugador.getNombre())) {
+                        daoRanking.registrarResultado(j.getNombre(), false);
+                    }
+                }
 
+                // Mostrar ranking actualizado por consola
+                System.out.println("\n── RANKING ACTUALIZADO ──────────────────");
+                for (EntradaRanking e : daoRanking.obtenerRanking()) {
+                    System.out.println(e);
+                }
+                System.out.println("─────────────────────────────────────────");
+
+            } catch (SQLException e) {
+                System.err.println("Error al actualizar ranking: " + e.getMessage());
+
+            // ─────────────────────────────────────────────────
         }
+    }
+
+
+
+
+
+
+
+
     }
 
 
