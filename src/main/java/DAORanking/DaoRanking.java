@@ -94,24 +94,32 @@ import ConexionBD .*;
         // Llama a este método al terminar cada partida
         public void registrarResultado(String nombre, boolean gano) throws SQLException {
 
+
+
             // 1. ¿Existe el jugador?
             Jugador jugador = buscarJugadorPorNombre(nombre);
             int idJugador;
 
+                //SI jugador no esta en la tabla jugador lo inserta y devuevelve el ID GENERADO
             if (jugador == null) {
                 idJugador = insertarJugador(nombre);
+
+                //SI esta solo devuelve el ID
             } else {
                 idJugador = jugador.getId();
             }
 
+
             // 2. ¿Tiene entrada en el ranking?
-            String sqlCheck = "SELECT id FROM ranking WHERE id_jugador = ?";
-            PreparedStatement ps = conn.prepareStatement(sqlCheck);
+            String sqlSELECT = "SELECT id FROM ranking WHERE id_jugador = ?";
+            PreparedStatement ps = conn.prepareStatement(sqlSELECT);
             ps.setInt(1, idJugador);
             ResultSet rs = ps.executeQuery();
 
+                //SI EL id ESTA EN EL RANKING ACTUALIZALO
             if (rs.next()) {
                 actualizarRanking(idJugador, gano);
+                //SI NO INSERTALO
             } else {
                 insertarEnRanking(idJugador, gano);
             }
