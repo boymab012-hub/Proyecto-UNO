@@ -140,17 +140,23 @@ public class Partida {
 
             System.out.println("\u001B[93m👑🏆 VICTORIA: " + jugador.getNombre() + " 🏆👑\u001B[0m");
 
+
+
             // ── RANKING ──────────────────────────────────────
+            //USAMOS EL BOOLEANO GANO PARA APLICAR EN LOS DISTINTOS METODO
+            //el jugador que gana OBVIAMENTE se le envia como parametro gano al metodo de daoRanking
             try {
                 // Registrar ganador
                 daoRanking.registrarResultado(jugador.getNombre(), true);
 
+                //y a los perdedores Se les envia gano como false.
                 // Registrar perdedores
                 for (Jugador j : jugadores.values()) {
                     if (!j.getNombre().equals(jugador.getNombre())) {
                         daoRanking.registrarResultado(j.getNombre(), false);
                     }
                 }
+
 
                 // Mostrar ranking actualizado por consola
                 System.out.println("\n── RANKING ACTUALIZADO ──────────────────");

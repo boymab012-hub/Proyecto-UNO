@@ -75,7 +75,7 @@ import ConexionBD .*;
             ps.executeUpdate();
         }
 
-        // Suma 1 a ganadas o perdidas y a jugadas
+        // Suma 1 a partidas ganadas o perdidas y a jugadas
         private void actualizarRanking(int idJugador, boolean gano) throws SQLException {
             String sql = "UPDATE ranking " +
                     "SET partidas_ganadas  = partidas_ganadas  + ?, " +
