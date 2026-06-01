@@ -3,6 +3,7 @@ package Jugador;
 import Carta.Carta;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Jugador {
@@ -53,31 +54,32 @@ public class Jugador {
     public Carta usarCarta() {
         Scanner sc = new Scanner(System.in);
         int numero = 0;
-        try {
 
-            //METODO DE SEGURIDAD PARA ELEGIR UNA POSICION CORRECTA DE LA MANO Y NO DE ERROR
-            do {
 
-                System.out.println("CARTAS JUGADOR: " + nombre);
-                System.out.println();
+        do {
+            System.out.println("CARTAS JUGADOR: " + nombre);
+            System.out.println();
+            mostrarMano();
+            System.out.println();
+            System.out.println("¿Qué carta quieres jugar?");
 
-                mostrarMano();
-
-                System.out.println();
-                System.out.println("Que Carta Quieres Jugar ?");
-
+            try {
 
                 numero = sc.nextInt();
 
-                //metodo de seguridad por si jugador pulsa un 0 o un numero mayor de los elementos del array
-                if (numero > mano.size() || numero < 0) {
+            } catch (InputMismatchException e) {
+                System.out.println("ENTRADA INVÁLIDA, introduce un número.");
+                sc.nextLine(); // limpiar el buffer
+                numero = 0;   // forzar que el do-while repita
+            }
 
-                    System.out.println("NO TIENES CARTAS EN ESTA POSICION");
-                }
-            } while (numero > mano.size() || numero < 1);
-        } catch (Exception e) {
-            return usarCarta();
-        }
+            if (numero < 1 || numero > mano.size()) {
+                System.out.println("NO TIENES CARTA EN ESA POSICIÓN.");
+                numero = 0;
+            }
+
+        } while (numero < 1 || numero > mano.size());
+
         return mano.get(numero - 1);
     }
 

@@ -80,6 +80,7 @@ public class Partida {
 
             }
 
+
             turnoJugador(jugadores.get(clave));
 
             mostrarCartaMesa();
@@ -145,15 +146,19 @@ public class Partida {
             // ── RANKING ──────────────────────────────────────
             //USAMOS EL BOOLEANO GANO PARA APLICAR EN LOS DISTINTOS METODO
             //el jugador que gana OBVIAMENTE se le envia como parametro gano al metodo de daoRanking
+
             try {
                 // Registrar ganador
                 daoRanking.registrarResultado(jugador.getNombre(), true);
 
                 //y a los perdedores Se les envia gano como false.
-                // Registrar perdedores
+                // Registramos recorremos hashmap jugadores y los jugadores que no ganaron se les actualiza o se insertan en la tabla ranking
                 for (Jugador j : jugadores.values()) {
+
                     if (!j.getNombre().equals(jugador.getNombre())) {
+
                         daoRanking.registrarResultado(j.getNombre(), false);
+
                     }
                 }
 
@@ -161,6 +166,7 @@ public class Partida {
                 // Mostrar ranking actualizado por consola
                 System.out.println("\n── RANKING ACTUALIZADO ──────────────────");
                 for (EntradaRanking e : daoRanking.obtenerRanking()) {
+
                     System.out.println(e);
                 }
                 System.out.println("─────────────────────────────────────────");
@@ -525,6 +531,9 @@ public class Partida {
         }
 
     }
+
+
+
 
 
     //METODO QUE COMPRUEBA Y EJECUTA CARTA +2 ↓↓↓↓↓↓↓↓↓
@@ -960,6 +969,11 @@ public class Partida {
         }
 
     }
+
+
+
+
+
 
 
     //METODO PARA APLICAR AFECTOS DE CARTA

@@ -27,8 +27,12 @@ import ConexionBD .*;
             if (keys.next()) {
                 return keys.getInt(1);
             }
+
             return -1;
+
         }
+
+
 
         // Busca jugador por nombre, devuelve null si no existe
         public Jugador buscarJugadorPorNombre(String nombre) throws SQLException {
@@ -40,6 +44,7 @@ import ConexionBD .*;
             if (rs.next()) {
                 return new Jugador(rs.getInt("id"), rs.getString("nombre"));
             }
+
             return null;
         }
 
@@ -75,6 +80,7 @@ import ConexionBD .*;
             ps.executeUpdate();
         }
 
+
         // Suma 1 a partidas ganadas o perdidas y a jugadas
         private void actualizarRanking(int idJugador, boolean gano) throws SQLException {
             String sql = "UPDATE ranking " +
@@ -102,10 +108,12 @@ import ConexionBD .*;
 
                 //SI jugador no esta en la tabla jugador lo inserta y devuevelve el ID GENERADO
             if (jugador == null) {
+
                 idJugador = insertarJugador(nombre);
 
                 //SI esta solo devuelve el ID
             } else {
+
                 idJugador = jugador.getId();
             }
 
@@ -121,6 +129,7 @@ import ConexionBD .*;
                 actualizarRanking(idJugador, gano);
                 //SI NO INSERTALO
             } else {
+
                 insertarEnRanking(idJugador, gano);
             }
         }
