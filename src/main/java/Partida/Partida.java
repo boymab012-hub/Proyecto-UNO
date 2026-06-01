@@ -77,6 +77,9 @@ public class Partida {
 
             comprobarGanador(jugadores.get(clave));
 
+            //SI LA PARTIDA CAMBIA A INACTIVA NO SE EJECUTA Y TERMINA PARTIDA
+                    if(partidaActiva){
+
 
                 if(jugadores.size() == 2){
 
@@ -93,12 +96,30 @@ public class Partida {
             clave = comprobarSentido(clave);
 
             }
+                    }
 
         }// llave while
 
     }
 
+        //METODO PARA REPARTIR PUNTOS Y ACTUALIZAR PARTIDAS JUGADAS
 
+    /*
+    public void repartirPuntos(Jugador ganador){
+
+        ganador.setPuntos(ganador.getPuntos() + 100);
+        System.out.println("RECIBE" + "+100 Puntos");
+        ganador.setPartidasGanadas(ganador.getPartidasGanadas() + 1);
+
+        for (Integer indice : jugadores.keySet()){
+
+            jugadores.get(indice).setPartidasJugadas(jugadores.get(indice).getPartidasJugadas() + 1);
+
+        }
+    }
+
+
+*/
     public void comprobarGanador(Jugador jugador) {
 
 
@@ -107,6 +128,8 @@ public class Partida {
             partidaActiva = false;
 
             System.out.println("\u001B[93m👑🏆 VICTORIA: " + jugador.getNombre() + " 🏆👑\u001B[0m");
+
+
 
         }
     }
@@ -1254,6 +1277,8 @@ public class Partida {
 
     //-------↓↓↓↓↓↓↓↓ METODOS DE REPARTICION DE CARTAS ↓↓↓↓↓↓↓↓↓-----------
 
+
+
     //Repartimos 7 cartas a cada jugador, Recorriendo el hashmap y usando metodo recibir carta de Jugador
     public void repartirMazoMesa() {
 
@@ -1307,6 +1332,15 @@ public class Partida {
 
     }
 
+
+
+
+
+
+
+
+
+
     public ArrayList<Carta> getMazoMesa() {
         return mazoMesa;
     }
@@ -1319,17 +1353,8 @@ public class Partida {
         return jugadores;
     }
 
-    public boolean isColorActivo() {
-        return colorActivo;
-    }
 
-    public void setColorActivo(boolean colorActivo) {
-        this.colorActivo = colorActivo;
-    }
 
-    public void setAcumulacionActiva(boolean acumulacionActiva) {
-        this.acumulacionActiva = acumulacionActiva;
-    }
 
     /* --------------------NUEVAS IMPLEMENTACIONES QUE FALTAN------
 1.COMPROBACION DE masoMeza Si esta vacio   -- listo

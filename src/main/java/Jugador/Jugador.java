@@ -6,10 +6,9 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Jugador {
-
+    private int id;
     private String nombre;
     private ArrayList<Carta> mano; // aqui guardamos las cartas del jugador
-    private int bank = 0;  // por si queremos añadir apuesta
 
 
     public Jugador(String nombre) {
@@ -142,13 +141,14 @@ public class Jugador {
         return mano;
     }
 
-    public int getBank() {
-        return bank;
-    }
 
     public void añadirCartaPrueba(Carta carta) {
 
         this.mano.add(carta);
+
+
+
+
 
 
     }
