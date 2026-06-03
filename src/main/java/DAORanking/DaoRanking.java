@@ -4,31 +4,50 @@ import Jugador.Jugador;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+
 import ConexionBD .*;
 
     public class DaoRanking {
 
-        private Connection conn;
+        private Connection conn = null;
+        private static DaoRanking instance = null;
 
-        public DaoRanking() {
-            this.conn = ConexionBD.getConnection();  // usa tu clase de conexión
+        public DaoRanking()  throws  SQLException{
+            conn = ConexionBD.getConnection();
+        }
+
+
+        public static DaoRanking getInstance() throws  SQLException{
+            if(instance == null){
+                instance = new DaoRanking();
+            }
+            return  instance;
         }
 
         // ── JUGADOR ─────────────────────────────────────────────────
 
         // Inserta jugador nuevo y devuelve el id generado
+        //PASAS EL NOMBRE DEL JUGADOOR Y TE DEVUELVE EL ID DE LA BASE DE DATOS.
         public int insertarJugador(String nombre) throws SQLException {
+
+            int idJugador;
             String sql = "INSERT INTO jugador (nombre) VALUES (?)";
             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, nombre);
             ps.executeUpdate();
 
             ResultSet keys = ps.getGeneratedKeys();
+
             if (keys.next()) {
-                return keys.getInt(1);
+                idJugador = keys.getInt(1);
+            }else{
+                idJugador = -1;
             }
 
-            return -1;
+            return idJugador;
 
         }
 
@@ -36,37 +55,39 @@ import ConexionBD .*;
 
         // Busca jugador por nombre, devuelve null si no existe
         public Jugador buscarJugadorPorNombre(String nombre) throws SQLException {
-            String sql = "SELECT * FROM jugador WHERE nombre = ?";
+
+            Jugador retornoJugador;
+            String sql = "SELECT * FROM jugador WHERE nombre = ? LIMIT 1";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, nombre);
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                return new Jugador(rs.getInt("id"), rs.getString("nombre"));
+                retornoJugador = new Jugador(rs.getInt("id"), rs.getString("nombre"));
+            }else{
+                retornoJugador = null;
             }
 
-            return null;
+            return retornoJugador;
         }
 
         // ── RANKING ─────────────────────────────────────────────────
 
         // Devuelve el ranking completo ordenado por victorias
-        public ArrayList<EntradaRanking> obtenerRanking() throws SQLException {
-            ArrayList<EntradaRanking> lista = new ArrayList<>();
+        public void mostrarRanking() throws SQLException {
             String sql = "SELECT * FROM ranking ORDER BY partidas_ganadas DESC";
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
-            while (rs.next()) {
-                lista.add(new EntradaRanking(
-                        rs.getInt("id"),
-                        rs.getInt("id_jugador"),
-                        rs.getInt("partidas_ganadas"),
-                        rs.getInt("partidas_perdidas"),
-                        rs.getInt("partidas_jugadas")
-                ));
+            //Mostramos el ranking del juego.
+            System.out.println("Ranking actualizado: ");
+            while (rs.next()){
+                System.out.println("Id:" + rs.getInt("id") +
+                        "\nid_jugador: " + rs.getInt("id_jugador") +
+                        "\npartidas_ganadas: " + rs.getInt("partidas_ganadas") +
+                        "\npartidas_jugadas: " + rs.getInt("partidas_jugadas") + "" +
+                        "\n----------");
             }
-            return lista;
         }
 
         // Inserta primera entrada en ranking para un jugador
@@ -98,9 +119,9 @@ import ConexionBD .*;
         // ── MÉTODO PRINCIPAL ─────────────────────────────────────────
 
         // Llama a este método al terminar cada partida
+
+        //COMPRUEBA SI EL JUGADOR EXISTA
         public void registrarResultado(String nombre, boolean gano) throws SQLException {
-
-
 
             // 1. ¿Existe el jugador?
             Jugador jugador = buscarJugadorPorNombre(nombre);
@@ -126,10 +147,11 @@ import ConexionBD .*;
 
                 //SI EL id ESTA EN EL RANKING ACTUALIZALO
             if (rs.next()) {
-                actualizarRanking(idJugador, gano);
-                //SI NO INSERTALO
-            } else {
 
+                //Actualiza el ranking del jugador ya existente.
+                actualizarRanking(idJugador, gano);
+                //Si el jugador no está registrado, insertalo en el ranking dependiendo de su estado final de la partida.
+            } else {
                 insertarEnRanking(idJugador, gano);
             }
         }
