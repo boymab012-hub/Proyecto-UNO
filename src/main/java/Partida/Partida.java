@@ -158,7 +158,9 @@ public class Partida {
                     }
                 }
 
+                daoRanking.obtenerRanking();
 
+                    /*
                 // Mostrar ranking actualizado por consola
                 System.out.println("\n── RANKING ACTUALIZADO ──────────────────");
                 for (EntradaRanking e : daoRanking.obtenerRanking()) {
@@ -166,6 +168,7 @@ public class Partida {
                     System.out.println(e);
                 }
                 System.out.println("─────────────────────────────────────────");
+                    */
 
             } catch (SQLException e) {
                 System.err.println("Error al actualizar ranking: " + e.getMessage());
