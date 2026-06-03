@@ -62,11 +62,28 @@ public class Main {
         //partida1.getJugadores().get(2).añadirCartaPrueba(new Carta(12,"ROJO","REVERSA","ACCION"));
         */
 
-
+        /*
         Partida partida1 = new Partida();
+
         partida1.inicarPartida();
 
+        System.out.println();
 
+
+
+        */
+
+
+
+        System.out.println(" \nID: " + "01 " + ("id")  +
+                "\nID_JUGADOR : " + "02 " + ("id_jugador") +
+                "\nPartidas_Ganadas : " +"84 " + ("partidas_ganadas") +
+                "\nPartidas_Perdidas: " + "20 " + ("partidas_perdidas") +
+                "\nPartidas_Jugadas " + "1 " + ("partidas_jugadas"));
+
+
+
+        System.out.println("--------------------------> GRACIAS FRAN POR TODO DX <---------------------------------------");
 
 
 
