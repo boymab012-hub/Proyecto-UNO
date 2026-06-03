@@ -968,6 +968,13 @@ public class Partida {
             //activamos acumulacion si es +2
         } else if (cartaJugada.getValor().equalsIgnoreCase("+2")) {
 
+            if (colorActivo) {
+
+                colorActivo = false;
+
+            }
+
+
             if (acumulacionActiva) {
 
                 acumulacion += 2;
@@ -1026,15 +1033,39 @@ public class Partida {
 
 
         if (ultimaCarta.getValor().equalsIgnoreCase(cartaMesa.getValor()) ||
-                ultimaCarta.getColor().equalsIgnoreCase(cartaMesa.getColor())) {
+                ultimaCarta.getColor().equalsIgnoreCase(cartaMesa.getColor()) ||
+                    ultimaCarta.getColor().equalsIgnoreCase(color)) {
 
             eleccionCartaRecibida(ultimaCarta, jugador);
 
         } else {
 
-            mostrarCartaRecibida(ultimaCarta);
+            mostrarCartaRecibida(ultimaCarta,jugador);
 
         }
+    }
+
+    public void mostrarCartaRecibida(Carta cartaRecibida,Jugador jugador) {
+
+        System.out.println();
+        System.out.println("El Jugador " + jugador.getNombre() + " Recibe: " + cartaRecibida.toString());
+        System.out.println();
+
+    }
+
+
+    //carta de la mesa boca arriba
+    public void mostrarCartaMesa() {
+
+        //CREAMOS ARRAY CON LOS STRINGS//CODIGOS DE COLOR
+        ArrayList<String> colores = new ArrayList<>();
+
+        //CARGAMOS STRINGS
+        cargarColoresLetra(colores);
+
+        System.out.println();
+        aplicarColoresLetra(cartaMesa, colores);
+        System.out.println();
     }
 
 
@@ -1075,6 +1106,7 @@ public class Partida {
 
             System.out.println();
             System.out.println("HAZ DECIDIDO CONSERVAR TU CARTA !");
+
 
         }
 
@@ -1233,34 +1265,7 @@ public class Partida {
     }
 
 
-    public void mostrarCartaRecibida(Carta cartaRecibida) {
 
-        //CREAMOS ARRAY CON LOS STRINGS//CODIGOS DE COLOR
-        ArrayList<String> colores = new ArrayList<>();
-
-        //CARGAMOS STRINGS
-        cargarColoresLetra(colores);
-
-        System.out.println();
-        aplicarColoresLetra(cartaRecibida, colores);
-        System.out.println();
-
-    }
-
-
-    //carta de la mesa boca arriba
-    public void mostrarCartaMesa() {
-
-        //CREAMOS ARRAY CON LOS STRINGS//CODIGOS DE COLOR
-        ArrayList<String> colores = new ArrayList<>();
-
-        //CARGAMOS STRINGS
-        cargarColoresLetra(colores);
-
-        System.out.println();
-        aplicarColoresLetra(cartaMesa, colores);
-        System.out.println();
-    }
 
 
     public void aplicarColoresLetra(Carta cartaIngresada, ArrayList<String> colores) {
@@ -1326,7 +1331,6 @@ public class Partida {
 
         jugador.recibirCarta(mazoMesa.remove(0));
 
-        System.out.println("El Jugador " + jugador.getNombre() + " Recibe 1 Carta y Pierde El Turno!");
 
     }
 

@@ -73,6 +73,29 @@ import ConexionBD .*;
 
         // ── RANKING ─────────────────────────────────────────────────
 
+
+
+        public void obtenerRanking()throws  SQLException{
+
+            String sql = "SELECT * FROM ranking ORDER BY partidas_ganadas DESC";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            //Mostramos el ranking del juego.
+            System.out.println("Ranking actualizado: ");
+            while (rs.next()){
+                System.out.println("Id:" + rs.getInt("id") +
+                        "\nid_jugador: " + rs.getInt("id_jugador") +
+                        "\npartidas_ganadas: " + rs.getInt("partidas_ganadas") +
+                        "\npartidas_jugadas: " + rs.getInt("partidas_jugadas") + "" +
+                        "\n----------");
+            }
+
+        }
+
+
+
+        /*
         // Devuelve el ranking completo ordenado por victorias
         public void mostrarRanking() throws SQLException {
             String sql = "SELECT * FROM ranking ORDER BY partidas_ganadas DESC";
@@ -89,6 +112,10 @@ import ConexionBD .*;
                         "\n----------");
             }
         }
+
+
+         */
+
 
         // Inserta primera entrada en ranking para un jugador
         private void insertarEnRanking(int idJugador, boolean gano) throws SQLException {
