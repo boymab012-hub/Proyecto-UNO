@@ -42,9 +42,6 @@ public class Partida {
     }
 
 
-
-
-
 //AQUI INICIAMOS TODO EL JUEGO PARA UN MAIN LIMPIO DX.
 
     public void inicarPartida() {
@@ -88,30 +85,30 @@ public class Partida {
             comprobarGanador(jugadores.get(clave));
 
             //SI LA PARTIDA CAMBIA A INACTIVA NO SE EJECUTA Y TERMINA PARTIDA
-                    if(partidaActiva){
+            if (partidaActiva) {
 
 
-                if(jugadores.size() == 2){
+                if (jugadores.size() == 2) {
 
-                   clave =  comprobarSentido2P(clave);
+                    clave = comprobarSentido2P(clave);
 
-                    }
+                }
 
 
-            //retorna el sentido si es NORMAL dara el siguiente jugador si es REVERSA dara el anterior
+                //retorna el sentido si es NORMAL dara el siguiente jugador si es REVERSA dara el anterior
 
-            if (jugadores.size() > 2){
+                if (jugadores.size() > 2) {
 
-            clave = comprobarSentido(clave);
+                    clave = comprobarSentido(clave);
 
+                }
             }
-                    }
 
         }// llave while
 
     }
 
-        //METODO PARA REPARTIR PUNTOS Y ACTUALIZAR PARTIDAS JUGADAS
+    //METODO PARA REPARTIR PUNTOS Y ACTUALIZAR PARTIDAS JUGADAS
 
     /*
     public void repartirPuntos(Jugador ganador){
@@ -140,7 +137,6 @@ public class Partida {
             partidaActiva = false;
 
             System.out.println("\u001B[93m👑🏆 VICTORIA: " + jugador.getNombre() + " 🏆👑\u001B[0m");
-
 
 
             // ── RANKING ──────────────────────────────────────
@@ -174,15 +170,9 @@ public class Partida {
             } catch (SQLException e) {
                 System.err.println("Error al actualizar ranking: " + e.getMessage());
 
-            // ─────────────────────────────────────────────────
+                // ─────────────────────────────────────────────────
+            }
         }
-    }
-
-
-
-
-
-
 
 
     }
@@ -196,14 +186,13 @@ public class Partida {
     }
 
 
-    public int comprobarSentido2P(int posActual){
+    public int comprobarSentido2P(int posActual) {
 
-        if(reversa){
+        if (reversa) {
 
             reversa = false;
 
             return posActual;
-
 
 
         } else {
@@ -218,9 +207,6 @@ public class Partida {
 
 
     }
-
-
-
 
 
     public int comprobarSentido(int posActual) {
@@ -313,11 +299,11 @@ public class Partida {
 
         String respuesta = "";
 
-        boolean colorValido= false;
+        boolean colorValido = false;
 
 
         //metodo de seguridad para elegir solo entre los 4 colores
-        while (!colorValido){
+        while (!colorValido) {
             System.out.println("↓↓↓↓↓↓↓ ¿ QUE COLOR QUIERES QUE HALLA EN LA MESA ?↓↓↓↓↓↓↓");
             System.out.println();
 
@@ -335,7 +321,7 @@ public class Partida {
                     !respuesta.equalsIgnoreCase("amarillo")) {
 
                 System.out.println("EL COLOR ELEGIDO NO ES VALIDO ");
-            }else {
+            } else {
 
                 colorValido = true;
 
@@ -355,7 +341,7 @@ public class Partida {
 
         colorActivo = true;
 
-        aplicarColoresActivarColor(color,colores);
+        aplicarColoresActivarColor(color, colores);
         System.out.println();
 
 
@@ -378,7 +364,7 @@ public class Partida {
 
             System.out.println("HAZ CAMBIADO EL COLOR DE LA MESA A " + (colores.get(4) + color.toUpperCase() + colores.get(5)));
 
-        } else{
+        } else {
 
             System.out.println("HAZ CAMBIADO EL COLOR DE LA MESA A " + (colores.get(6) + color.toUpperCase() + colores.get(7)));
         }
@@ -497,7 +483,7 @@ public class Partida {
 
                     }
 
-                    if (!cartaValida){
+                    if (!cartaValida) {
                         mostrarCartaMesa();
                     }
                 }// LLAVE while
@@ -531,9 +517,6 @@ public class Partida {
         }
 
     }
-
-
-
 
 
     //METODO QUE COMPRUEBA Y EJECUTA CARTA +2 ↓↓↓↓↓↓↓↓↓
@@ -650,7 +633,7 @@ public class Partida {
                         System.out.println();
 
                     }
-                    if (!cartaValida){
+                    if (!cartaValida) {
                         mostrarCartaMesa();
                     }
                 }// LLAVE while
@@ -727,7 +710,7 @@ public class Partida {
                     System.err.println("LA CARTA ELEGIDA NO ESTA PERMITIDA");
                     System.out.println();
                 }
-                if (!cartaValida){
+                if (!cartaValida) {
                     mostrarCartaMesa();
                 }
             }//llave WHILE
@@ -754,65 +737,61 @@ public class Partida {
         boolean poseerCarta = false;
         Carta cartaJugada;
 
-        if (cartaMesa.getValor().equalsIgnoreCase("SALTAR")) {
 
+        for (Carta carta : manoJugador) {
 
-            for (Carta carta : manoJugador) {
+            if (carta.getTipo().equalsIgnoreCase("COMODIN") ||
+                    carta.getValor().equalsIgnoreCase("SALTAR") ||
+                    carta.getColor().equalsIgnoreCase(cartaMesa.getColor())) {
 
-                if (carta.getTipo().equalsIgnoreCase("COMODIN") ||
-                        carta.getValor().equalsIgnoreCase("SALTAR") ||
-                        carta.getColor().equalsIgnoreCase(cartaMesa.getColor())) {
+                poseerCarta = true;
 
-                    poseerCarta = true;
-
-                }
             }
+        }
 
-            if (poseerCarta) {
+        if (poseerCarta) {
 
 
-                while (!cartaValida) {
-                    System.out.println("TIENES CARTA PARA JUGAR");
+            while (!cartaValida) {
+                System.out.println("TIENES CARTA PARA JUGAR");
+                System.out.println();
+
+                cartaJugada = jugador.usarCarta();
+
+                if (cartaJugada.getValor().equalsIgnoreCase("SALTAR") ||
+                        cartaJugada.getColor().equalsIgnoreCase(cartaMesa.getColor()) ||
+                        cartaJugada.getTipo().equalsIgnoreCase("COMODIN")) {
+
+
+                    cartaValida = true;
+
+                    cambiarCartaMesa(cartaJugada);
+
+                    jugador.soltarCartaUsada(cartaJugada);
+
+                    //Aplica efectos
+                    ejecutarCartaJugada(cartaJugada);
+
+                } else {
+
+                    System.err.println("LA CARTA JUGADA NO ESTA PERMITIDA");
                     System.out.println();
-
-                    cartaJugada = jugador.usarCarta();
-
-                    if (cartaJugada.getValor().equalsIgnoreCase("SALTAR") ||
-                            cartaJugada.getColor().equalsIgnoreCase(cartaMesa.getColor()) ||
-                            cartaJugada.getTipo().equalsIgnoreCase("COMODIN")) {
-
-
-                        cartaValida = true;
-
-                        cambiarCartaMesa(cartaJugada);
-
-                        jugador.soltarCartaUsada(cartaJugada);
-
-                        //Aplica efectos
-                        ejecutarCartaJugada(cartaJugada);
-
-                    } else {
-
-                        System.err.println("LA CARTA JUGADA NO ESTA PERMITIDA");
-                        System.out.println();
-                    }
-                    if (!cartaValida){
-                        mostrarCartaMesa();
-                    }
                 }
-
-                //si no posee carta en la mano para jugar
-            } else {
-
-                repartir1Carta(jugador);
-
-                //obtenemos la ultima carta recibida
-                Carta ultimaCarta = manoJugador.get(jugador.getMano().size() - 1);
-
-                comprobarCartaRecibida(ultimaCarta, jugador);
-
-
+                if (!cartaValida) {
+                    mostrarCartaMesa();
+                }
             }
+
+            //si no posee carta en la mano para jugar
+        } else {
+
+            repartir1Carta(jugador);
+
+            //obtenemos la ultima carta recibida
+            Carta ultimaCarta = manoJugador.get(jugador.getMano().size() - 1);
+
+            comprobarCartaRecibida(ultimaCarta, jugador);
+
 
         }
 
@@ -870,7 +849,7 @@ public class Partida {
                         System.out.println();
                     }
 
-                    if (!cartaValida){
+                    if (!cartaValida) {
                         mostrarCartaMesa();
                     }
 
@@ -949,7 +928,7 @@ public class Partida {
                     System.out.println();
                 }
 
-                if (!cartaValida){
+                if (!cartaValida) {
                     mostrarCartaMesa();
                 }
 
@@ -969,11 +948,6 @@ public class Partida {
         }
 
     }
-
-
-
-
-
 
 
     //METODO PARA APLICAR AFECTOS DE CARTA
@@ -1057,15 +1031,15 @@ public class Partida {
     }
 
 
-    public void comprobarCartaRecibida(Carta ultimaCarta, Jugador jugador){
+    public void comprobarCartaRecibida(Carta ultimaCarta, Jugador jugador) {
 
 
-        if(ultimaCarta.getValor().equalsIgnoreCase(cartaMesa.getValor()) ||
-        ultimaCarta.getColor().equalsIgnoreCase(cartaMesa.getColor())){
+        if (ultimaCarta.getValor().equalsIgnoreCase(cartaMesa.getValor()) ||
+                ultimaCarta.getColor().equalsIgnoreCase(cartaMesa.getColor())) {
 
             eleccionCartaRecibida(ultimaCarta, jugador);
 
-        }else {
+        } else {
 
             mostrarCartaRecibida(ultimaCarta);
 
@@ -1268,10 +1242,7 @@ public class Partida {
     }
 
 
-
-
-
-    public void mostrarCartaRecibida(Carta cartaRecibida){
+    public void mostrarCartaRecibida(Carta cartaRecibida) {
 
         //CREAMOS ARRAY CON LOS STRINGS//CODIGOS DE COLOR
         ArrayList<String> colores = new ArrayList<>();
@@ -1284,7 +1255,6 @@ public class Partida {
         System.out.println();
 
     }
-
 
 
     //carta de la mesa boca arriba
@@ -1325,7 +1295,7 @@ public class Partida {
             System.out.println("LA CARTA DE LA MESA ES: " + cartaIngresada.toStringSuper(colores.get(8), colores.get(9)));
         }
 
-        if (colorActivo){
+        if (colorActivo) {
 
             System.out.println("Y EL COLOR ACTIVO ES: " + color.toUpperCase());
         }
@@ -1337,7 +1307,6 @@ public class Partida {
 
 
     //-------↓↓↓↓↓↓↓↓ METODOS DE REPARTICION DE CARTAS ↓↓↓↓↓↓↓↓↓-----------
-
 
 
     //Repartimos 7 cartas a cada jugador, Recorriendo el hashmap y usando metodo recibir carta de Jugador
@@ -1373,7 +1342,6 @@ public class Partida {
     public void repartirAcumulacion(Jugador jugador, int acumulado) {
 
 
-
         for (int i = 0; i < acumulado; i++) {
 
             if (mazoMesa.isEmpty()) {
@@ -1392,14 +1360,6 @@ public class Partida {
 
 
     }
-
-
-
-
-
-
-
-
 
 
     public ArrayList<Carta> getMazoMesa() {
