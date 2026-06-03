@@ -64,9 +64,11 @@ public class Main {
 
 
         Partida partida1 = new Partida();
+
         partida1.inicarPartida();
 
-
+        System.out.println();
+        System.out.println("--------------------------> GRACIAS FRAN POR TODO DX <---------------------------------------");
 
 
 
