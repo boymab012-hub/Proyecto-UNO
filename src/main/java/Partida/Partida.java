@@ -23,7 +23,6 @@ public class Partida {
     private String color;
     private HashMap<Integer, Jugador> jugadores;
     private boolean partidaActiva = true;
-    private DaoRanking daoRanking = new DaoRanking();
 
 
     public Partida() {
@@ -145,27 +144,18 @@ public class Partida {
 
             try {
                 // Registrar ganador
-                daoRanking.registrarResultado(jugador.getNombre(), true);
-
+                DaoRanking.getInstance().registrarResultado(jugador.getNombre(), true);
                 //y a los perdedores Se les envia gano como false.
                 // Registramos recorremos hashmap jugadores y los jugadores que no ganaron se les actualiza o se insertan en la tabla ranking
                 for (Jugador j : jugadores.values()) {
-
                     if (!j.getNombre().equals(jugador.getNombre())) {
-
-                        daoRanking.registrarResultado(j.getNombre(), false);
-
+                        DaoRanking.getInstance().registrarResultado(j.getNombre(), false);
                     }
                 }
 
-
                 // Mostrar ranking actualizado por consola
-                System.out.println("\n── RANKING ACTUALIZADO ──────────────────");
-                for (EntradaRanking e : daoRanking.obtenerRanking()) {
+                DaoRanking.getInstance().mostrarRanking();
 
-                    System.out.println(e);
-                }
-                System.out.println("─────────────────────────────────────────");
 
             } catch (SQLException e) {
                 System.err.println("Error al actualizar ranking: " + e.getMessage());
@@ -176,6 +166,7 @@ public class Partida {
 
 
     }
+
 
 
     public void turnoJugador(Jugador jugador) {
